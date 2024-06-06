@@ -136,7 +136,7 @@ const ImageCard = ({ id, src, file_name, polygons, sx, fieldId, defaultValue='co
 export const ImageGrid = ({ data }) => {
   return (
     <ImageGridContainer>
-      {data?.map(({ src, id }, i) => <ImageCard key={src} fieldId={id || `img_${i}`} src={src} />) 
+      {data?.map(({ src, id, ...d }, i) => <ImageCard key={src} fieldId={id || `img_${i}`} id={id} {...d} src={src} />) 
        || <Alert color="warning" sx={{justifyContent: 'center'}}>No images found</Alert>}
     </ImageGridContainer>
   )

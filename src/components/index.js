@@ -1,7 +1,11 @@
 import 'style/index.css';
 import * as React from 'react';
+import { useMemo } from 'react';
 import styled, { keyframes } from 'styled-components'
 import Button from '@mui/joy/Button';
+import Box from '@mui/joy/Box';
+import Chip from '@mui/joy/Chip';
+import CssBaseline from '@mui/joy/CssBaseline';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 import PopupExample from './PopupExample';
@@ -9,8 +13,6 @@ import ImageGrid, { LabeledImage } from './ImageGrid';
 import ExampleGrid from './ExampleGrid';
 import theme from '../theme';
 import { CssVarsProvider, extendTheme } from '@mui/joy/styles';
-import { Box, Chip, CssBaseline } from '@mui/joy';
-import { useMemo } from 'preact/hooks';
 
 function App() {
   return <CssVarsProvider theme={theme}>…</CssVarsProvider>;
@@ -31,7 +33,7 @@ const FormMeta = (data) => (<>
   {Object.entries(data).map(([k, v]) => v != null && <input type='hidden' value={`${v}`} name={k} key={k} />)}
 </>)
 
-const imageProcess = (img, { baseUrl }) => ({...img, src: img.src || `${baseUrl||''}/${d.file_name.replace(/^\//, '')}`})
+const imageProcess = (img, { baseUrl }) => ({...img, src: img.src || `${baseUrl||''}/${img.file_name.replace(/^\//, '')}`})
 
 
 const ImageForm = ({ 
