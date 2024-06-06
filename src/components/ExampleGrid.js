@@ -121,7 +121,7 @@ const ImageGrid = ({ images, children }) => {
             boxShadow: 'lg',
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'hidden',
+            overflow: 'auto',
             outline: 'black solid 1px',
           }}
         >
@@ -134,7 +134,7 @@ const ImageGrid = ({ images, children }) => {
               flexDirection: 'column',
               justifyContent: 'stretch',
               flexShrink: '1',
-              minHeight: '1rem',
+              minHeight: '4em',
             }}
           >
             <ModalClose variant="plain" sx={{ m: 1 }} />
