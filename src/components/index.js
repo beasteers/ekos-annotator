@@ -41,7 +41,8 @@ const ImageForm = ({
     page, total, 
     action, meta, 
     assignmentId, batchId,
-    baseUrl
+    baseUrl,
+    onSubmit,
   }) => {
     images = useMemo(() => images?.map(d => imageProcess(d, { baseUrl })), [images, baseUrl])
     return (
@@ -58,7 +59,7 @@ const ImageForm = ({
               <ImageGrid data={images} />
 
               {/* Submit */}
-              {images && <Button type='submit' variant='soft' color='neutral' sx={{ p: 1 }}>
+              {images && <Button type='submit' variant='soft' color='neutral' sx={{ p: 1 }} onSubmit={onSubmit}>
                 {page == null || page === total ? 'Submit' : `Next (${page}/${total || '-'})`}
               </Button>}
             </Stack>
