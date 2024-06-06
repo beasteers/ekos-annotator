@@ -249,9 +249,41 @@ export function Task1(props) {
   </ImageForm>
 }
 
-export default function Task({ task='segmentation', ...props }) {
+export function Task2(props) {
+  const { predicate, baseUrl } = props;
+  let pos = useMemo(() => POS_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [POS_EXAMPLES, baseUrl])
+  let neg = useMemo(() => NEG_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [NEG_EXAMPLES, baseUrl])
+  return <ImageForm {...props}>
+        <Stack spacing={1} alignItems='center'>
+          <Typography level='h3' sx={{ fontWeight: 400 }}>
+            Please select images where the highlighted object is
+            <Typography sx={{ fontSize: '1.8em' }}>
+              <Co>[</Co><b>{predicate || '—'}</b><Co>]</Co>
+            </Typography>
+          </Typography>
+        </Stack>
+        <KeyHints />
+        {/* <Task1Help /> */}
+        <Box display='flex' gap={2} alignItems='start'>
+        <ExampleGrid images={pos}>
+          <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
+          Examples of <Bo c="success">Correct</Bo> Annotations
+          </Typography>
+        </ExampleGrid>
+        <ExampleGrid images={neg}>
+          <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
+          Examples of <Bo c="danger">Incorrect</Bo> Annotations
+          </Typography>
+        </ExampleGrid>
+        </Box>
+  </ImageForm>
+}
+
+export default function Task({ task='noun', ...props }) {
   switch (task) {
-    case 'segmentation':
+    case 'noun':
+      return <Task1 {...props} />
+    case 'predicate':
       return <Task1 {...props} />
     default:
       return <Typography>Task {task} not found</Typography>
