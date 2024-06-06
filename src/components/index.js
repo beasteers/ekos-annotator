@@ -31,6 +31,9 @@ const FormMeta = (data) => (<>
   {Object.entries(data).map(([k, v]) => v != null && <input type='hidden' value={`${v}`} name={k} key={k} />)}
 </>)
 
+const imageProcess = (img, { baseUrl }) => ({...img, src: img.src || `${baseUrl||''}/${d.file_name.replace(/^\//, '')}`})
+
+
 const ImageForm = ({ 
     children, images, noun, 
     page, total, 
@@ -38,7 +41,7 @@ const ImageForm = ({
     assignmentId, batchId,
     baseUrl
   }) => {
-    images = useMemo(() => images?.map(d => ({...d, src: `${baseUrl}/${d.file_name.replace(/^\//, '')}`})), [images, baseUrl, ext])
+    images = useMemo(() => images?.map(d => imageProcess(d, { baseUrl })), [images, baseUrl])
     return (
       <CssVarsProvider defaultMode="dark" modeStorageKey="image-ann-color-mode" theme={theme}>
         <CssBaseline />

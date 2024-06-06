@@ -10,7 +10,7 @@ export default function App({ pageSize=6, seed=12345, ...props }) {
     page = isNaN(page) ? undefined : page;
   
     const { nouns, pageData, total } = useFullCsv('/images/frames_meta.json', { noun, page, pageSize, seed });
-    console.log({ nouns, page, total });
+    console.log({ nouns, pageData, page, total });
     // page={page} total={total}
     return (<>
       {pageData && <Task {...props} page={page+1} total={total} noun={noun} images={pageData} />}
