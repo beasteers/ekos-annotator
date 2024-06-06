@@ -11,7 +11,7 @@ node_modules/
 static/images*
 
 # ignore build
-build/
+# build/
 
 # ignore test coverage
 coverage.data
