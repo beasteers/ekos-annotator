@@ -30,7 +30,7 @@ export default function App({ pageSize=6, seed=12345, ...props }) {
   
     const allData = React.useMemo(() => {
       return data && shuffle(data?.filter(d => d.noun === noun).map(d => {
-        return {...d, url: `/images/frames/${d.file_name}`}
+        return {...d, src: `/images/frames/${d.file_name}`}
       }), seed)
     }, [data, noun, seed]);
   

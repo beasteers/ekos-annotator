@@ -121,12 +121,12 @@ const ImageContainer = styled.div`
 
 const SAMPLE_POLY = [[[0.1, 0.1],[0.2, 0.1],[0.2, 0.2],[0.1, 0.2],],[[0.3, 0.3],[0.4, 0.3],[0.4, 0.4],[0.3, 0.4],]]
 
-const ImageCard = ({ id, url, polygons, sx, fieldId, defaultValue='correct' }) => {
+const ImageCard = ({ id, src, file_name, polygons, sx, fieldId, defaultValue='correct' }) => {
     const [ value, setValue ] = React.useState(defaultValue);
-    id = id || url.split('/').pop();
+    id = id || src.split('/').pop();
     return (
         <ImageContainer>
-            <SegmentedImage imageUrl={url} polygons={polygons} />
+            <SegmentedImage src={src} polygons={polygons} />
             <input type="hidden" name={`${fieldId}_id`} value={id} />
             <JoyRadio value={value} fieldId={fieldId} setValue={setValue} />
         </ImageContainer>
@@ -136,7 +136,7 @@ const ImageCard = ({ id, url, polygons, sx, fieldId, defaultValue='correct' }) =
 export const ImageGrid = ({ data }) => {
   return (
     <ImageGridContainer>
-      {data?.map(({ url, id }, i) => <ImageCard key={url} fieldId={id || `img_${i}`} url={url} />) 
+      {data?.map(({ src, id }, i) => <ImageCard key={src} fieldId={id || `img_${i}`} src={src} />) 
        || <Alert color="warning" sx={{justifyContent: 'center'}}>No images found</Alert>}
     </ImageGridContainer>
   )

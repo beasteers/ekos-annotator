@@ -34,11 +34,11 @@ const Mask = styled.mask`
     }
 `;
 
-const SegmentedImage = ({ imageUrl, polygons }) => {
+const SegmentedImage = ({ src, polygons }) => {
     const id = useId();
     return (
         <ImageContainer>
-            <img src={imageUrl} alt="Segmented Image" loading="lazy" />
+            <img src={src} alt="Segmented Image" loading="lazy" />
             {polygons && <svg
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                 viewBox="0 0 1 1"
