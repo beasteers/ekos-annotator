@@ -74,54 +74,54 @@ const ImageForm = ({
 
 const POS_EXAMPLES = [
   {
-    "src": "/images/frames/P02_128_58_6020_pre_xmem_spoon.jpg",
+    "file_name": "P02_128_58_6020_pre_xmem_spoon.jpg",
     "noun": "spoon", "label": "correct",
     "description": "Most of the spoon is segmented, but the handle is not."
   },
   {
-    "src": "/images/frames/P30_107_525_78555_pre_xmem_fork.jpg",
+    "file_name": "P30_107_525_78555_pre_xmem_fork.jpg",
     "noun": "fork", "label": "correct",
     "description": "The object is difficult to see, but given the context, you can reasonably guess it is a fork."
   },
   {
-    "src": "/images/frames/P04_03_137_30049_pre_xmem_drawer.jpg",
+    "file_name": "P04_03_137_30049_pre_xmem_drawer.jpg",
     "noun": "drawer", "label": "correct",
     "description": "If the segmentation contains multiple of an object (e.g. multiple drawers in a fridge), it can be considered correct."
   },
   {
-    "src": "/images/frames/P30_107_626_96660_mid_xmem_choi:pak.jpg",
+    "file_name": "P30_107_626_96660_mid_xmem_choi:pak.jpg",
     "noun": "pak choi", "label": "correct",
     "description": "The object segmented is pak choi."
   },
   {
-    "src": "/images/frames/P30_107_918_149015_mid_egohos_cupboard.jpg",
+    "file_name": "P30_107_918_149015_mid_egohos_cupboard.jpg",
     "noun": "cupboard", "label": "correct",
     "description": "The object segmented is the edge of the cupboard."
   },
   {
-    "src": "/images/frames/P30_07_21_2916_mid_xmem_mug.jpg",
+    "file_name": "P30_07_21_2916_mid_xmem_mug.jpg",
     "noun": "mug", "label": "correct",
     "description": "The mug is segmented."
   },
   {
-    "src": "/images/frames/P02_03_126_21779_pre_xmem_onion.jpg",
+    "file_name": "P02_03_126_21779_pre_xmem_onion.jpg",
     "noun": "onion", "label": "correct",
     "description": "Looks like an onion."
   }
 ]
 const NEG_EXAMPLES = [
   {
-      "src": "/images/frames/P09_106_13_3589_mid_xmem_juice.jpg",
+      "file_name": "P09_106_13_3589_mid_xmem_juice.jpg",
       "noun": "juice", "label": "incorrect",
       "description": "The juice is not highlighted, something else in the fridge is."
   },
   {
-      "src": "/images/frames/P30_107_918_148955_pre_xmem_cupboard.jpg",
+      "file_name": "P30_107_918_148955_pre_xmem_cupboard.jpg",
       "noun": "cupboard", "label": "incorrect",
       "description": "The highlighted object is cutlery, not a cupboard."
   },
   {
-      "src": "/images/frames/P25_09_78_34912_pre_xmem_sponge.jpg",
+      "file_name": "P25_09_78_34912_pre_xmem_sponge.jpg",
       "noun": "sponge", "label": "incorrect",
       "description": "Dish soap is segmented instead of the sponge."
   }
@@ -218,7 +218,9 @@ const KeyHints = () => {
 }
 
 export function Task1(props) {
-  const { noun } = props;
+  const { noun, baseUrl } = props;
+  let pos = useMemo(() => POS_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [POS_EXAMPLES, baseUrl])
+  let neg = useMemo(() => NEG_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [NEG_EXAMPLES, baseUrl])
   return <ImageForm {...props}>
         <Stack spacing={1} alignItems='center'>
           <Typography level='h3' sx={{ fontWeight: 400 }}>
@@ -232,12 +234,12 @@ export function Task1(props) {
         <KeyHints />
         {/* <Task1Help /> */}
         <Box display='flex' gap={2} alignItems='start'>
-        <ExampleGrid images={POS_EXAMPLES}>
+        <ExampleGrid images={pos}>
           <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
           Examples of <Bo c="success">Correct</Bo> Annotations
           </Typography>
         </ExampleGrid>
-        <ExampleGrid images={NEG_EXAMPLES}>
+        <ExampleGrid images={neg}>
           <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
           Examples of <Bo c="danger">Incorrect</Bo> Annotations
           </Typography>
