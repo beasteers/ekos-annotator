@@ -1,0 +1,14 @@
+version: '2.4'
+
+services:
+  preact_testing:
+    container_name: preact-app-demo
+    build:
+      context: "./"
+    image: preact-app-demo
+    volumes:
+      - ./:/app
+    ports:
+      - 9009:80
+    environment: {}
+    restart: always
