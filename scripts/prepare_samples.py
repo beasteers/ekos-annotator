@@ -81,6 +81,8 @@ def fix_colon(x):
 def get_event_stats(row, h5, buffer=10):
     # load data from H5 file
     g = h5[row.narration_id]
+    source = g['source'][()].astype('str')
+    visor_source = source == 'visor'
     frame_ids = g['frame_index'][()]
     class_ids = g['class_ids'][()]
     class_id = row.noun_class
@@ -95,19 +97,27 @@ def get_event_stats(row, h5, buffer=10):
 
     # filter frames by time boundaries
     mn_frames = frame_ids[class_ids == class_id]
+    mn_frames_visor = visor_source[class_ids == class_id]
     pre_mn_frames = frame_ids[(class_ids == class_id) & (frame_ids >= pre_0) & (frame_ids < pre_1)]
+    pre_mn_frames_visor = visor_source[(class_ids == class_id) & (frame_ids >= pre_0) & (frame_ids < pre_1)]
     mid_mn_frames = frame_ids[(class_ids == class_id) & (frame_ids >= mid_0) & (frame_ids < mid_1)]
+    mid_mn_frames_visor = visor_source[(class_ids == class_id) & (frame_ids >= mid_0) & (frame_ids < mid_1)]
     post_mn_frames = frame_ids[(class_ids == class_id) & (frame_ids >= post_0) & (frame_ids < post_1)]
+    post_mn_frames_visor = visor_source[(class_ids == class_id) & (frame_ids >= post_0) & (frame_ids < post_1)]
     
     # store frames
     row['main_noun_frames'] = list(mn_frames)
     row['n_main_noun_frames'] = len(mn_frames)
     row['main_noun_pre_frames'] = list(pre_mn_frames)
     row['n_main_noun_pre_frames'] = len(pre_mn_frames)
+    row['main_noun_pre_frames_visor'] = list(pre_mn_frames_visor)
     row['main_noun_mid_frames'] = list(mid_mn_frames)
     row['n_main_noun_mid_frames'] = len(mid_mn_frames)
+    row['main_noun_mid_frames_visor'] = list(mid_mn_frames_visor)
     row['main_noun_post_frames'] = list(post_mn_frames)
     row['n_main_noun_post_frames'] = len(post_mn_frames)
+    row['main_noun_post_frames_visor'] = list(post_mn_frames_visor)
+    row['action_in_visor'] = True if sum(visor_source) else False
     return row
 
 
@@ -117,11 +127,14 @@ def sample_actions(df, noun_ratio, n):
 
 def sample_frame(row, h5, key):
     g = h5[row.narration_id]
-    frame_id = random.choice(row[key])
+    frame_idx = random.choice(range(len(row[key])))
+    frame_id = row[key][frame_idx]
+    visor_source = row[f'{key}_visor'][frame_idx]
     mask = (g['frame_index'][()] == frame_id) & (g['class_ids'][()] == row.noun_class)
     
     row['frame_id'] = frame_id
     row['polygons'] = g['segments'][mask]
+    row['comes_from_visor'] = visor_source
     return row
 
 
@@ -158,15 +171,19 @@ def extract(annotation_path, h5_path, p_actions=0.1):
     ])
 
     # write out result
-    df = df[['narration_id', 'temporal_loc', 'noun', 'frame_id', 'polygons']]
+    df = df[['narration_id', 'temporal_loc', 'noun', 'frame_id', 'polygons','comes_from_visor','action_in_visor']]
     return df
 
-import ipdb
-@ipdb.iex
+#import ipdb
+#@ipdb.iex
 def main(annotation_dir='/scratch/bs3639/ego2023/epic-kitchens-100-annotations', h5_path='/scratch/bs3639/EKOS_val.h5', p_actions=0.1):
-    train_df = extract(f'{annotation_dir}/EPIC_100_train.csv', '/scratch/bs3639/EKOS_train.h5').assign(split='train')
-    val_df = extract(f'{annotation_dir}/EPIC_100_validation.csv', '/scratch/bs3639/EKOS_val.h5').assign(split='val')
+    val_df = extract(f'{annotation_dir}/EPIC_100_validation.csv', '/scratch/bs3639/EKOS_val_3.h5').assign(split='val')
+    train_df = extract(f'{annotation_dir}/EPIC_100_train.csv', '/scratch/bs3639/EKOS_train_3.h5').assign(split='train')
     df = pd.concat([train_df, val_df])
+
+    # post cleaning
+    df.reset_index(drop=True, inplace=True)
+    df.set_index('narration_id', inplace=True)
 
     # write out result
     df.to_csv('mturk_results.csv')
