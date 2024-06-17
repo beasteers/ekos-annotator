@@ -9,6 +9,9 @@ shhh/
 
 node_modules/
 static/images*
+static/**/*.jpg
+static/**/*.png
+static/**/*.csv
 
 # ignore build
 # build/

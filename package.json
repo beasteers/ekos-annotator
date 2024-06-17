@@ -46,6 +46,7 @@
     "@mui/icons-material": "^5.15.19",
     "@mui/joy": "^5.0.0-beta.28",
     "@mui/system": "^5.15.15",
+    "papaparse": "^5.4.1",
     "preact": "^10.19.3",
     "preact-habitat": "^3.3.0",
     "styled-components": "^6.1.8",

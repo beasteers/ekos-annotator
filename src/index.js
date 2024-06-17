@@ -3,8 +3,8 @@ import Widget from './app';
 import Task from './components';
 
 // habitat render docs: https://github.com/zouhir/preact-habitat#api-docs
-const { render } = habitat(Task);
-// const { render } = habitat(Widget);
+// const { render } = habitat(Task);
+const { render } = habitat(Widget);
 /**
  * option 1: render inline - just add the script inside the HTML element that you want to render in. 
  * 

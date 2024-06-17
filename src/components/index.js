@@ -13,6 +13,7 @@ import ImageGrid, { LabeledImage } from './ImageGrid';
 import ExampleGrid from './ExampleGrid';
 import theme from '../theme';
 import { CssVarsProvider, extendTheme } from '@mui/joy/styles';
+import { Sheet } from '@mui/joy';
 
 function App() {
   return <CssVarsProvider theme={theme}>…</CssVarsProvider>;
@@ -26,6 +27,7 @@ const Hi = styled.span`
 `
 const Co = styled.span`
   color: #ffc803;
+  margin: 0 0.2em;
 `
 const Bo = ({ c='primary', children, ...p }) => <Typography variant="soft" color={c} fontWeight={700} noWrap {...p}>{children}</Typography>
 
@@ -37,30 +39,53 @@ const imageProcess = (img, { baseUrl }) => ({...img, src: img.src || `${baseUrl|
 
 
 const ImageForm = ({ 
-    children, images, noun, 
+    children, help, 
+    images,
     page, total, 
-    action, meta, 
+    action, 
     assignmentId, batchId,
     baseUrl,
     onSubmit,
+    optionLabels,
+    formMeta,
+    ...props
   }) => {
+    let { noun, state } = props;
+    console.log(images)
     images = useMemo(() => images?.map(d => imageProcess(d, { baseUrl })), [images, baseUrl])
+    page = page == null && total != null ? 0 : page;
+
+
+
     return (
       <CssVarsProvider defaultMode="dark" modeStorageKey="image-ann-color-mode" theme={theme}>
         <CssBaseline />
         <Box p={2}>
         <form action={action}>
             {/* Metadata */}
-            <FormMeta {...{ noun, page, batchId, ...meta }} />
+            <FormMeta {...{ page: page+1, batchId, ...formMeta }} />
             <input type='hidden' value={assignmentId} name='assignmentId' id='assignmentId'/>
             <Stack spacing={1}>
+              {help}
+              {/* <Sheet variant='outlined' elevation={4} sx={{
+                py: 4,
+                borderRadius: '0.4em',
+                // bgcolor: 'primary.softBg',
+                marginBottom: '1em !important',
+              }}>
+              <Stack spacing={1}>
+                {children}
+              </Stack>
+              </Sheet> */}
               {children}
+              
+              
               {/* Images */}
-              <ImageGrid data={images} />
+              <ImageGrid data={images} optionLabels={optionLabels} />
 
               {/* Submit */}
-              {images && <Button type='submit' variant='soft' color='neutral' sx={{ p: 1 }} onSubmit={onSubmit}>
-                {page == null || page === total ? 'Submit' : `Next (${page}/${total || '-'})`}
+              {images && <Button type='submit' variant='soft' color='primary' sx={{ p: 1 }} onSubmit={onSubmit}>
+                {page == null || page+1 == total ? 'Submit' : `Next (${page+1}/${total || '-'})`}
               </Button>}
             </Stack>
           </form>
@@ -109,7 +134,7 @@ const POS_EXAMPLES = [
     "noun": "onion", "label": "correct",
     "description": "Looks like an onion."
   }
-]
+].map(d => ({src: `/images/frames/${d.file_name}`, ...d}))
 const NEG_EXAMPLES = [
   {
       "file_name": "P09_106_13_3589_mid_xmem_juice.jpg",
@@ -126,7 +151,7 @@ const NEG_EXAMPLES = [
       "noun": "sponge", "label": "incorrect",
       "description": "Dish soap is segmented instead of the sponge."
   }
-]
+].map(d => ({src: `/images/frames/${d.file_name}`, ...d}))
 
 function Task1Help() {
   return (<Stack spacing={1} direction='row' justifyContent='center' alignItems='center'>
@@ -203,88 +228,232 @@ function Task1Help() {
   </Stack>)
 }
 
+
+const Instructions = () => {
+  return (<Stack spacing={1} direction='row' justifyContent='center' alignItems='center'>
+  <PopupExample message={<>
+    Instructions
+    </>} color='primary'>
+      <KeyHints />
+      <Typography level='h1' sx={{ fontWeight: 400 }} mb={2}>
+      <Typography level='h1' sx={{ fontWeight: 900 }}>Question: </Typography>
+        Does the label describe the segmented object?
+      </Typography>
+      <Typography mb={1}>
+        The images are taken from egocentric videos of people performing household tasks, typically in their kitchen. 
+      </Typography>
+      <Typography mb={1}>
+        Your job is to determine if the label accurately describes the segmented object. 
+        This means that your primary focus is 
+      </Typography>
+      {/* <Typography>
+        This can mean:
+        <ul>
+          <li></li>
+        </ul>
+      </Typography> */}
+    </PopupExample>
+  </Stack>)
+}
+
+
+const LabelBox = ({ title, children, button, sx, titleProps, ...props }) => {
+  return (
+      <Sheet variant='outlined' elevation={4} sx={{
+        py: 3,
+        pb: button != null ? 5 : 3,
+        borderRadius: '0.4em',
+        // bgcolor: 'primary.softBg',
+        marginTop: '1em !important',
+        marginBottom: button != null ? '2em !important' : '1em !important',
+        position: 'relative',
+        ...sx,
+      }} {...props}>
+        {title && <Box {...titleProps} sx={{ 
+          position: 'absolute', top: 0, left: '1em', 
+          transform: 'translate(0, -50%)', 
+          px: '0.5em',
+          bgcolor: 'background.surface',
+          ...titleProps?.sx,
+        }}>
+          {title}
+        </Box>}
+              
+        {children}
+
+        {button && <Box sx={{ 
+          position: 'absolute', bottom: 0, left: '50%', 
+          transform: 'translate(-50%, 50%)', 
+          px: '0.5em',
+          bgcolor: 'background.surface',
+        }}>
+          {button}
+        </Box>}
+    </Sheet>
+    )
+}
+
+
 const KeyHints = () => {
-  return (<Box justifyContent='center' flexWrap='wrap' mb={1} sx={{ display: { xs: 'none', md: 'flex' }}}>
-    <Typography>
-      <Chip color='primary'>Tab</Chip>: Next Image, 
-    </Typography>
-    <Typography>
-    <Chip color='primary'>Shift-Tab</Chip>: Prev Image, 
-    &nbsp;&nbsp;&nbsp;
-    </Typography>
-    <Typography>
-      <Chip color='primary'>Space</Chip>,<Chip color='primary'>Return</Chip>: Select / Submit, 
-    </Typography>
-    </Box>)
+  return (
+      <LabelBox title='Keyboard Shortcuts'>
+        <Stack gap={2} direction='row' justifyContent='center' flexWrap='wrap' sx={{ 
+          display: { xs: 'none', md: 'flex' },
+        }}>
+          <Typography>
+            <Chip color='primary'>Tab</Chip>: Next Image
+          </Typography>
+          <Typography>
+          <Chip color='primary'>Shift-Tab</Chip>: Prev Image
+          </Typography>
+          <Typography>
+            <Chip color='primary'>Space</Chip>,<Chip color='primary'>Return</Chip>: Select / Submit
+          </Typography>
+          <Typography>
+            <Chip color='primary'>Hover</Chip>: Hide mask
+          </Typography>
+        </Stack>
+    </LabelBox>
+    )
 }
 
 export function Task1(props) {
-  const { noun, baseUrl } = props;
+  const { noun, baseUrl, aliases } = props;
   let pos = useMemo(() => POS_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [POS_EXAMPLES, baseUrl])
   let neg = useMemo(() => NEG_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [NEG_EXAMPLES, baseUrl])
-  return <ImageForm {...props}>
-        <Stack spacing={1} alignItems='center'>
-          <Typography level='h3' sx={{ fontWeight: 400 }}>
-            Please select images where
-            <Typography sx={{ fontSize: '1.8em' }}>
-              <Co>[</Co><b>{noun || '—'}</b>(s)<Co>]</Co>
-            </Typography>
-            are correctly segmented.
-          </Typography>
-        </Stack>
-        <KeyHints />
-        {/* <Task1Help /> */}
-        <Box display='flex' gap={2} alignItems='start'>
-        <ExampleGrid images={pos}>
-          <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
-          Examples of <Bo c="success">Correct</Bo> Annotations
-          </Typography>
-        </ExampleGrid>
-        <ExampleGrid images={neg}>
-          <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
-          Examples of <Bo c="danger">Incorrect</Bo> Annotations
-          </Typography>
-        </ExampleGrid>
-        </Box>
+  return <ImageForm {...props} 
+                    optionLabels={{ correct: noun, wrong: `not ${noun}` }} 
+                    formMeta={{ noun }} 
+                    help={<>
+    {/* <Task1Help /> */}
+    <Box display='flex' gap={2} alignItems='start'>
+      <ExampleGrid images={pos}>
+        <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
+        Examples of <Bo c="success">Correct</Bo> Annotations
+        </Typography>
+      </ExampleGrid>
+      <ExampleGrid images={neg}>
+        <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
+        Examples of <Bo c="danger">Incorrect</Bo> Annotations
+        </Typography>
+      </ExampleGrid>
+    </Box>
+  </>}>
+    <LabelBox button={<Instructions />}>
+    {/* <Stack spacing={1} alignItems='center'> */}
+      {/* <Typography level='h3' sx={{ fontWeight: 400 }}>
+        Please select images where
+        <Typography sx={{ fontSize: '1.8em' }}>
+          <Co>[</Co><b>{noun || '—'}</b>(s)<Co>]</Co>
+        </Typography>
+        are correctly segmented.
+      </Typography> */}
+
+      <Typography textAlign='center' level='h3' sx={{ fontWeight: 400 }}>
+        Can this object be described as
+        <Typography sx={{ fontSize: '1.8em' }}>
+          <Co>[</Co><b>{noun || '—'}</b>(s)<Co>]</Co>
+        </Typography>
+      </Typography>
+      {aliases?.length && <Stack direction='row' gap={2} justifyContent='center'>
+      <Typography>
+        Also accepted:
+      </Typography>
+      <Stack direction='row' gap={2} justifyContent='center' sx={{overflow: 'auto'}}>
+      {aliases.map(x => <Chip variant='soft' color='primary' key={x}>{x}</Chip>)}
+      </Stack>
+      </Stack>}
+    {/* </Stack> */}
+    
+    {/* <Task1Help /> */}
+    
+    </LabelBox>
   </ImageForm>
 }
 
+
 export function Task2(props) {
-  const { predicate, baseUrl } = props;
+  console.log(props)
+  const { noun, state, baseUrl, aliases } = props;
   let pos = useMemo(() => POS_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [POS_EXAMPLES, baseUrl])
   let neg = useMemo(() => NEG_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [NEG_EXAMPLES, baseUrl])
-  return <ImageForm {...props}>
-        <Stack spacing={1} alignItems='center'>
-          <Typography level='h3' sx={{ fontWeight: 400 }}>
-            Please select images where the highlighted object is
-            <Typography sx={{ fontSize: '1.8em' }}>
-              <Co>[</Co><b>{predicate || '—'}</b><Co>]</Co>
-            </Typography>
-          </Typography>
-        </Stack>
-        <KeyHints />
-        {/* <Task1Help /> */}
-        <Box display='flex' gap={2} alignItems='start'>
-        <ExampleGrid images={pos}>
-          <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
-          Examples of <Bo c="success">Correct</Bo> Annotations
-          </Typography>
-        </ExampleGrid>
-        <ExampleGrid images={neg}>
-          <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
-          Examples of <Bo c="danger">Incorrect</Bo> Annotations
-          </Typography>
-        </ExampleGrid>
-        </Box>
+  return <ImageForm {...props} 
+                    optionLabels={{ correct: state, wrong: `not ${state}` }} 
+                    formMeta={{ noun, state }} 
+                    help={<>
+    {/* <Task1Help /> */}
+    <Box display='flex' gap={2} alignItems='start'>
+      <ExampleGrid images={pos}>
+        <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
+        Examples of <Bo c="success">Correct</Bo> Annotations
+        </Typography>
+      </ExampleGrid>
+      <ExampleGrid images={neg}>
+        <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
+        Examples of <Bo c="danger">Incorrect</Bo> Annotations
+        </Typography>
+      </ExampleGrid>
+    </Box>
+  </>}>
+    <LabelBox button={<Instructions />}>
+      <Typography textAlign='center' level='h3' sx={{ fontWeight: 400 }}>
+        Is the <b>{noun || 'object'}</b>
+        <Typography sx={{ fontSize: '1.8em' }}>
+          <Co>[</Co><b>{state || '—'}</b><Co>]</Co>
+        </Typography>
+      </Typography>
+      {/* {aliases?.length && <Stack direction='row' gap={2} justifyContent='center'>
+      <Typography>
+        Also accepted:
+      </Typography>
+      <Stack direction='row' gap={2} justifyContent='center' sx={{overflow: 'auto'}}>
+      {aliases.map(x => <Chip variant='soft' color='primary' key={x}>{x}</Chip>)}
+      </Stack>
+      </Stack>} */}
+    {/* </Stack> */}
+    
+    {/* <Task1Help /> */}
+    
+    </LabelBox>
   </ImageForm>
 }
+
+// export function Task2(props) {
+//   const { predicate, baseUrl } = props;
+//   let pos = useMemo(() => POS_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [POS_EXAMPLES, baseUrl])
+//   let neg = useMemo(() => NEG_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [NEG_EXAMPLES, baseUrl])
+//   return <ImageForm {...props}>
+//         <Stack spacing={1} alignItems='center'>
+//           <Typography level='h3' sx={{ fontWeight: 400 }}>
+//             Please select images where the highlighted object can be described as
+//             <Typography sx={{ fontSize: '1.8em' }}>
+//               <Co>[</Co><b>{predicate || '—'}</b><Co>]</Co>
+//             </Typography>
+//           </Typography>
+//         </Stack>
+//         <KeyHints />
+//         <Task1Help />
+//         <Box display='flex' gap={2} alignItems='start'>
+//         <ExampleGrid images={pos}>
+//           <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
+//           Examples of <Bo c="success">Correct</Bo> Annotations
+//           </Typography>
+//         </ExampleGrid>
+//         <ExampleGrid images={neg}>
+//           <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
+//           Examples of <Bo c="danger">Incorrect</Bo> Annotations
+//           </Typography>
+//         </ExampleGrid>
+//         </Box>
+//   </ImageForm>
+// }
 
 export default function Task({ task='noun', ...props }) {
   switch (task) {
     case 'noun':
       return <Task1 {...props} />
-    case 'predicate':
-      return <Task1 {...props} />
+    case 'pred':
+      return <Task2 {...props} />
     default:
       return <Typography>Task {task} not found</Typography>
   }

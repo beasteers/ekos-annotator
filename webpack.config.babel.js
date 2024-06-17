@@ -82,6 +82,9 @@ module.exports = (env, argv) => {
       // colors: true,
       historyApiFallback: true,
       open: true
-    }
+    },
+    watchOptions: {
+      ignored: '/static/'
+    },
   }
 };

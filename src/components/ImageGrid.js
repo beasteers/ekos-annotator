@@ -6,6 +6,8 @@ import ToggleButtonGroup from '@mui/joy/ToggleButtonGroup';
 import Alert from '@mui/joy/Alert';
 import SegmentedImage from './SegmentedImage';
 import { Box, Typography } from '@mui/joy';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 /* -------------------------------------------------------------------------- */
@@ -13,12 +15,12 @@ import { Box, Typography } from '@mui/joy';
 /* -------------------------------------------------------------------------- */
 
 const BUTTONS = [
-    {x: "correct", color: "success", icon: '✅'},
+    {x: "correct", color: "success", icon: <CheckIcon />},
     // {x: "ambiguous", color: "warning"},
-    {x: "wrong", color: "danger", icon: '❌'},
+    {x: "wrong", color: "danger", icon: <CloseIcon />},
 ]
 
-function JoyRadio({ value, setValue, fieldId, buttons=BUTTONS, defaultValue='correct' }) {
+function JoyRadio({ value, setValue, fieldId, buttons=BUTTONS, defaultValue='correct', optionLabels }) {
   const id = useId();
 
   return (
@@ -28,16 +30,16 @@ function JoyRadio({ value, setValue, fieldId, buttons=BUTTONS, defaultValue='cor
     >
       {buttons.map(({ x, text, color, icon }) => (
         <Button key={x} value={x} color={color} variant={'outlined'} role="radio" tabIndex={x === value ? -1 : 0} sx={{
-          fontSize: x === value ? '1.3em' : '1em',
+          // fontSize: x === value ? '1.3em' : '1em',
           flexGrow: 1,
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,
-        }}>
-          {x === value && icon}
+        }} startDecorator={x === value && icon}>
+          {/* {x === value && icon} */}
           {" "}
-          {text||x}
+          {optionLabels?.[x]||text||x}
           <div style={{display: 'none'}}>
-            <label htmlFor={`${x}-${id}`}>{text||x}</label>
+            <label htmlFor={`${x}-${id}`}>{optionLabels?.[x]||text||x}</label>
             <input type="radio" id={`${x}-${id}`} name={`${fieldId}_label`} value={x} checked={x === value} />
           </div>
         </Button>
@@ -100,7 +102,7 @@ const ImageGridContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 5px; */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(500px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
   /* grid-template-rows: repeat(3, 400px); */
   gap: 12px;
   /* max-width: 50em; */
@@ -121,22 +123,23 @@ const ImageContainer = styled.div`
 
 const SAMPLE_POLY = [[[0.1, 0.1],[0.2, 0.1],[0.2, 0.2],[0.1, 0.2],],[[0.3, 0.3],[0.4, 0.3],[0.4, 0.4],[0.3, 0.4],]]
 
-const ImageCard = ({ id, src, file_name, polygons, sx, fieldId, defaultValue='correct' }) => {
+const ImageCard = ({ id, src, file_name, polygons, sx, fieldId, defaultValue='correct', optionLabels }) => {
     const [ value, setValue ] = React.useState(defaultValue);
     id = id || src.split('/').pop();
     return (
         <ImageContainer>
-            <SegmentedImage src={src} polygons={polygons} />
             <input type="hidden" name={`${fieldId}_id`} value={id} />
-            <JoyRadio value={value} fieldId={fieldId} setValue={setValue} />
+            <SegmentedImage src={src} polygons={polygons}>
+              <JoyRadio value={value} fieldId={fieldId} setValue={setValue} optionLabels={optionLabels} />
+            </SegmentedImage>
         </ImageContainer>
     )
 }
 
-export const ImageGrid = ({ data }) => {
+export const ImageGrid = ({ data, ...props }) => {
   return (
     <ImageGridContainer>
-      {data?.map(({ src, id, ...d }, i) => <ImageCard key={src} fieldId={id || `img_${i}`} id={id} {...d} src={src} />) 
+      {data?.map(({ src, id, ...d }, i) => <ImageCard key={src} fieldId={id || `img_${i}`} id={id} {...props} {...d} src={src} />) 
        || <Alert color="warning" sx={{justifyContent: 'center'}}>No images found</Alert>}
     </ImageGridContainer>
   )

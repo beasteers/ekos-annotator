@@ -24,10 +24,12 @@
 	
 	<!-- Here's how you can support multiple instances -->
 	<div class="ekos-annotator">
-		<script type="application/json">
+		<!-- <script type="application/json">
 				{
 					"baseUrl": "https://ekos-mturk-test-samples.s3.us-east-2.amazonaws.com/frames",
 					"noun": "onion",
+					"predicate": "cut",
+					"task": "predicate",
 					"images": [
 						{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"},
 						{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"},
@@ -39,6 +41,18 @@
 						{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"},
 						{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"}
 					]
+				}
+			  </script> -->
+			  <!-- <script type="application/json">
+				{
+					"baseUrl": "/mturk_images",
+					"task": "pred"
+				}
+			  </script> -->
+			  <script type="application/json">
+				{
+					"baseUrl": "/mturk_images_pred",
+					"task": "pred"
 				}
 			  </script>
 		</div>

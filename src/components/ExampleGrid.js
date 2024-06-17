@@ -37,7 +37,7 @@ const ImageGrid = ({ images, children }) => {
   )
 
   return (
-    <Box flex='1 1 0px' p={0.5} pb={0} mb={1} sx={{
+    <Box flex='1 1 0px' p={0.5} pb={0} mb={3} sx={{
         border: '1px solid var(--joy-palette-neutral-500)',
         borderRadius: 'md',
         display: 'flex',
@@ -68,6 +68,7 @@ const ImageGrid = ({ images, children }) => {
                 minHeight: 0,
                 height: 0,
                 padding: 0,
+                justifyContent: 'center',
                 '& button span': {
                     transition: 'transform 0.3s',
                     '&.Mui-expanded': {
@@ -78,22 +79,26 @@ const ImageGrid = ({ images, children }) => {
                     borderRadius: '10rem',
                     mx: 1, my: 0, 
                     width: '1em',
-                    height: '1em',
+                    height: '0.8em',
                     minWidth: '1em',
                     boxSizing: 'content-box',
                     minHeight: 0,
-                    bgcolor: 'background.body',
+                    bgcolor: 'primary.solidBg',
+                    color: 'primary.solidColor',
                     transition: 'background-color 0.3s',
                     transform: 'translateY(-50%)',
                     flexGrow: 0,
                     flexBasis: 'content',
-                    ':hover': {
-                        bgcolor: 'transparent',
+                    ':not(.Mui-selected, [aria-selected="true"]):hover': {
+                        // bgcolor: 'transparent',
+                        bgcolor: 'primary.solidHoverBg',
+                        color: 'primary.solidColor',
                     }
                 },
             }} slotProps={{
                 button: {tabIndex: -1},
             }}>
+              More
             </AccordionSummary>
             <AccordionDetails>
                 <Grid container spacing={1}>

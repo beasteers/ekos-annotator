@@ -7,13 +7,15 @@ import Sheet from '@mui/joy/Sheet';
 import Alert from '@mui/joy/Alert';
 import { Box } from '@mui/joy';
 
-export default function PopupExample({ message, color, buttonText='Open', children }) {
+export default function PopupExample({ message, color, buttonText='Open', buttonVariant='solid', children }) {
   const [open, setOpen] = React.useState(false);
   return (
     <React.Fragment>
-        <Alert color={color} onClick={() => setOpen(true)} sx={{ cursor: 'pointer', py: 0.4 }}>
+        <Alert color={color} onClick={() => setOpen(true)} sx={{ cursor: 'pointer', py: 1, px: 1, fontWeight: 900 }}>
+            <Typography sx={{ mx: 1 }}>
             {message}
-            <Button variant="outlined" size='sm' color={color}>
+            </Typography>
+            <Button variant={buttonVariant} size='sm' color={color}>
                 {buttonText}
             </Button>
         </Alert>
@@ -25,23 +27,22 @@ export default function PopupExample({ message, color, buttonText='Open', childr
         <Sheet
           variant="outlined"
           sx={{
-            maxWidth: 800,
+            maxWidth: '95vw',
             maxHeight: '90vh',
             borderRadius: 'md',
             p: 3,
+            px: 6,
             boxShadow: 'lg',
             display: 'flex',
             flexDirection: 'column',
           }}
         >
           <ModalClose variant="plain" sx={{ m: 1 }} />
-          <Typography component="h2" level="h4" textColor="inherit" fontWeight="lg" mb={1}>
+          <Typography component="h2" textColor="inherit" fontWeight="lg" mb={1}>
             {message}
           </Typography>
           <Box sx={{overflow: 'auto', flexShrink: '1'}}>
-            <Typography textColor="text.tertiary">
-              {children}
-            </Typography>
+            {children}
           </Box>
         </Sheet>
       </Modal>
