@@ -56,9 +56,10 @@ const LabeledImageContainer = styled.div`
     .image-wrap {
       position: relative;
       display: flex;
-      span.image-label {
+      & > .MuiTypography-root {
         position: absolute;
-        bottom: 0.2em;
+        /* bottom: 0.2em; */
+        top: 0.2em;
         left: 50%;
         transform: translateX(-50%);
       }
@@ -74,7 +75,7 @@ export const LabeledImage = ({ src, label, children, color='success' }) => {
   return (
       <LabeledImageContainer>
         <div className='image-wrap'>
-          <Typography className='image-label' variant='solid' bgcolor={`rgba(var(--joy-palette-${color}-mainChannel) / 0.50)`} fontWeight={700} noWrap>
+          <Typography className='image-label' variant='solid' bgcolor={`rgba(var(--joy-palette-${color}-mainChannel) / 0.60)`} fontWeight={700} noWrap>
             {label}
           </Typography>
           <img src={src} loading='lazy' />
@@ -127,7 +128,7 @@ const ImageCard = ({ id, src, file_name, polygons, sx, fieldId, defaultValue='co
     const [ value, setValue ] = React.useState(defaultValue);
     id = id || src.split('/').pop();
     return (
-        <ImageContainer>
+        <ImageContainer onClick={() => console.log({src, file_name, id, polygons}) || console.log(JSON.stringify({file_name, polygons}))}>
             <input type="hidden" name={`${fieldId}_id`} value={id} />
             <SegmentedImage src={src} polygons={polygons}>
               <JoyRadio value={value} fieldId={fieldId} setValue={setValue} optionLabels={optionLabels} />

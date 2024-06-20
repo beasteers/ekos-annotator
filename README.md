@@ -66,3 +66,10 @@ Keywords: image, classification, batch, assess, quality, predicates, logic, obje
 	</div>
 <script src="https://cdn.jsdelivr.net/gh/beasteers/ekos-annotator@main/build/bundle.js" data-mount-in=".ekos-annotator" type="text/javascript"></script>
 ```
+## Update jsdelivr
+You have to purge their cache
+
+Go to https://www.jsdelivr.com/tools/purge
+```
+
+```

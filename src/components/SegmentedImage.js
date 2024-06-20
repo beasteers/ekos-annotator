@@ -4,6 +4,7 @@ import Box from '@mui/joy/Box';
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import IconButton from '@mui/joy/IconButton';
+import T from '@mui/joy/Typography';
 // import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import { useId } from 'preact/hooks';
@@ -135,15 +136,33 @@ const Polygons = ({ polygons, width, height }) => {
     );
 }
 
-const SegmentedImage = ({ src, polygons, children, width = 854, height = 480, granularAccessability=false }) => {
+const SegmentedImage = ({ src, polygons, label, correct, children, width = 854, height = 480, granularAccessability=false }) => {
     const { zoomStyle } = zoomToPolygon({ polygons, width, height });
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const LABEL = (
+        (label || correct!=null) && <T variant='soft' color={correct ? 'success' : correct === false ? 'danger' : 'primary'} sx={{
+            position: 'absolute',
+            top: -2,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1,
+            fontSize: '1em',
+            fontWeight: 'bold',
+            borderRadius: 'md',
+
+        }}>
+            {correct ? '✅' : correct === false ? '❌' : ''}&nbsp;
+            {label || (correct ? 'correct' : correct === false ? 'incorrect' : '')}
+        </T>
+    )
+
     return (
         <Box sx={{ position: 'relative', overflow: 'hidden' }}>
+            {LABEL}
             <IconButton sx={{ position: 'absolute', top: 8, left: 8, zIndex: 1 }} onClick={handleOpen} tabIndex={granularAccessability?0:-1}>
                 <FullscreenIcon />
             </IconButton>
@@ -175,6 +194,7 @@ const SegmentedImage = ({ src, polygons, children, width = 854, height = 480, gr
                     }}
                 >
                     <ModalClose sx={{ m: 1 }} />
+                    {LABEL}
                     <ImageContainer style={{ position: 'relative', borderRadius: '0.3em', boxShadow: 24, overflow: 'hidden', }}>
                         <img src={src}  alt={`Missing image ${src}`} loading="lazy" style={{ width: '100%' }} />
                         {polygons && <Polygons polygons={polygons} width={width} height={height} />}

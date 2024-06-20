@@ -6,7 +6,7 @@ import Papa from 'papaparse';
 
 const TASK_KEY = {
   'noun': 'noun',
-  'pred': 'state',
+  'predicate': 'state',
 }
 
 export default function App({ pageSize=6, seed=12345, ...props }) {
@@ -22,9 +22,10 @@ export default function App({ pageSize=6, seed=12345, ...props }) {
 
     const { data: nounData } = useCsv(`/EPIC_100_noun_classes_v2.csv`);
     // console.log(nounData)
-    let aliases = React.useMemo(() => 
-      nounData?.reduce((o, x) => (x.key?{...o, [fixNounFormat(x.key)]: JSON.parse(x.instances.replaceAll("'", '"')).filter(k=>k!=x.key).map(fixNounFormat)}:o), {})
-    , [nounData])
+    // let aliases = React.useMemo(() => 
+    //   nounData?.reduce((o, x) => (x.key?{...o, [fixNounFormat(x.key)]: JSON.parse(x.instances.replaceAll("'", '"')).filter(k=>k!=x.key).map(fixNounFormat)}:o), {})
+    // , [nounData])
+    let aliases;
 
     console.log({ options, pageData, group, page, total });
 

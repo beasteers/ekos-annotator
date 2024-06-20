@@ -7,8 +7,8 @@ import Sheet from '@mui/joy/Sheet';
 import Alert from '@mui/joy/Alert';
 import { Box } from '@mui/joy';
 
-export default function PopupExample({ message, color, buttonText='Open', buttonVariant='solid', children }) {
-  const [open, setOpen] = React.useState(false);
+export default function PopupExample({ message, color, buttonText='Open', defaultOpen=false, buttonVariant='solid', children }) {
+  const [open, setOpen] = React.useState(defaultOpen);
   return (
     <React.Fragment>
         <Alert color={color} onClick={() => setOpen(true)} sx={{ cursor: 'pointer', py: 1, px: 1, fontWeight: 900 }}>
@@ -30,18 +30,23 @@ export default function PopupExample({ message, color, buttonText='Open', button
             maxWidth: '95vw',
             maxHeight: '90vh',
             borderRadius: 'md',
-            p: 3,
-            px: 6,
+            // p: 3,
+            // px: 6,
             boxShadow: 'lg',
             display: 'flex',
             flexDirection: 'column',
           }}
         >
           <ModalClose variant="plain" sx={{ m: 1 }} />
-          <Typography component="h2" textColor="inherit" fontWeight="lg" mb={1}>
+          {/* <Typography component="h2" textColor="inherit" fontWeight="lg" mb={1}>
             {message}
-          </Typography>
-          <Box sx={{overflow: 'auto', flexShrink: '1'}}>
+          </Typography> */}
+          <Box sx={{
+            overflow: 'auto', flexShrink: '1',
+            p: 3,
+            pt: 1,
+            px: 6,
+          }}>
             {children}
           </Box>
         </Sheet>
