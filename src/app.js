@@ -32,7 +32,9 @@ export default function App({ pageSize=6, seed=12345, ...props }) {
 
 
     return (<>
-      {pageData && <Task {...props} task={task} page={page} total={total} {...pageData} aliases={aliases?.[group]} />}
+      <form>
+        {pageData && <Task {...props} task={task} page={page} total={total} {...pageData} aliases={aliases?.[group]} />}
+      </form>
       <ul>
         {options.map(n => <li key={n}><a href={`?group=${n}`}>{n}</a></li>)}
       </ul>

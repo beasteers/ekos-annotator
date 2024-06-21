@@ -53,7 +53,7 @@ export default function PopupExample({ message, color, buttonText='Open', defaul
             overflow: 'auto', flexShrink: '1',
             p: 3,
             pt: 1,
-            px: 6,
+            px: { xs: 0, lg: 6 },
           }}>
             {children}
           </Box>

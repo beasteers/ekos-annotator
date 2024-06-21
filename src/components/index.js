@@ -17,7 +17,7 @@ import ExampleGrid from './ExampleGrid';
 import theme from '../theme';
 import { CssVarsProvider, extendTheme } from '@mui/joy/styles';
 import { Sheet } from '@mui/joy';
-import ImageForm, { LabelBox, KeyHints } from './ImageForm';
+import ImageForm, { LabelBox, KeyHints, DarkModeButton } from './ImageForm';
 // import PDDL from './PDDL';
 
 function App() {
@@ -239,12 +239,14 @@ const InstructionsTask1 = ({ baseUrl }) => {
     Instructions
     </>} color='primary'>
       <KeyHints />
+      <DarkModeButton />
 
       <Sheet sx={{ 
         maxWidth: 850,  textAlign: 'center',
         '& ul': {
           textAlign: 'left',
           pl: 4,
+          pr: 1,
           '& li': {
             my: 2,
           }
@@ -253,7 +255,7 @@ const InstructionsTask1 = ({ baseUrl }) => {
           mt: 2,
         }
       }}>
-        <Box textAlign='center' sx={{ px: 6 }}>
+        <Box textAlign='center' sx={{ px: { xs: 0, lg: 6 }, '& > .MuiTypography-root': { px: 1 } }}>
         <T level='h1' sx={{ my: 4 }}>
           Verify the highlighted object
         </T>
@@ -346,7 +348,7 @@ const InstructionsTask1 = ({ baseUrl }) => {
 const InstructionsTask2 = ({ baseUrl }) => {
   const EXAMPLES = [
     {
-      title: 'Easy Cases',
+      title: 'Simple Cases',
       description: 'The object is clearly visible and easy to classify.',
       images: [
         {
@@ -357,8 +359,51 @@ const InstructionsTask2 = ({ baseUrl }) => {
           file_name:"P23_101_108_39108.jpg",
           label: 'onion cut', correct: false,
         },
+        {
+          file_name:"P10_04_186_73649.jpg",
+          label: 'bowl clean', correct: false,
+        },
       ],
     },
+    {
+      // title: 'Simple Cases',
+      // description: 'The object is clearly visible and easy to classify.',
+      images: [
+        {
+          file_name:"P25_107_430_93650.jpg",
+          label: 'aubergine held', correct: true,
+        },
+        {
+          file_name:"P25_107_73_27189.jpg",
+          label: 'aubergine held', correct: true,
+        },
+        {
+          file_name:"P01_09_482_121455.jpg",
+          label: 'aubergine held', correct: false,
+        },
+      ],
+    },
+    {
+      // title: 'Simple Cases',
+      // description: 'The object is clearly visible and easy to classify.',
+      images: [
+        {
+          file_name:"P28_02_132_23873.jpg",
+          label: 'aubergine held', correct: true,
+        },
+        {
+          file_name:"P25_107_73_27189.jpg",
+          label: 'aubergine held', correct: true,
+        },
+        {
+          file_name:"P01_09_482_121455.jpg",
+          label: 'aubergine held', correct: false,
+        },
+      ],
+    },
+
+    
+    
   ]
 
   return (<Stack spacing={1} direction='row' justifyContent='center' alignItems='center'>
@@ -366,6 +411,7 @@ const InstructionsTask2 = ({ baseUrl }) => {
     Instructions
     </>} color='primary'>
       <KeyHints />
+      <DarkModeButton />
 
       <Sheet sx={{ 
         maxWidth: 850,  textAlign: 'center',
@@ -408,8 +454,8 @@ const InstructionsTask2 = ({ baseUrl }) => {
 
         {EXAMPLES?.map(({ title, description, images }) => (
           <B>
-            <T level='h3'>{title}</T>
-            <T>{description}</T>
+            {title && <T level='h3'>{title}</T>}
+            {description && <T>{description}</T>}
             <Stack direction='row'>
               {images?.map(({src, file_name, ...p}) => <SegmentedImage src={src||`${baseUrl}/${file_name}`} {...p} />)}
             </Stack>
@@ -494,7 +540,7 @@ function naturalizePredicate(predicate, subjectNoun, objectNoun) {
   const regex = /(?:\((not ))?\((?:(is|can)-)?([\w-]+)\s+([?\w\s]+)\)+/g;
   const match = regex.exec(predicate);
 
-  let not, linkVerb, shortLinkVerb, adj, object, args, subjectArticle, objectArticle;
+  let not, linkVerb, shortLinkVerb, adj, object, args, subjectArticle, objectArticle, post;
   if (match) {
     [, not, linkVerb, adj, args] = match;
     [, object] = args?.split(' ');
@@ -518,6 +564,10 @@ function naturalizePredicate(predicate, subjectNoun, objectNoun) {
     object = 'surface';
     objectNoun = 'surface';
   }
+  console.log(adj, objectNoun)
+  if (adj == 'touching' && !objectNoun) {
+    post = '(other than hands)'
+  }
 
   subjectArticle = "the"
   objectArticle = object && objectNoun?"a":"";
@@ -528,12 +578,12 @@ function naturalizePredicate(predicate, subjectNoun, objectNoun) {
   const cln = q => q.replace(/\s+([\s?])/g, '$1').trim();
   return {
     // is the onion not touching a hand?
-    question: cln(`${linkVerb} ${subjectArticle} ${subjectNoun} ${not} ${adj} ${objectArticle} ${objectNoun}?`),
+    question: cln(`${linkVerb} ${subjectArticle} ${subjectNoun} ${not} ${adj} ${objectArticle} ${objectNoun}? ${post}`),
     // onion not touching hand
-    statement: cln(`${subjectNoun} ${linkVerb} ${not} ${adj} ${objectNoun}`),
+    statement: cln(`${subjectNoun} ${linkVerb} ${not} ${adj} ${objectNoun} ${post}`),
     positive: !not,
-    positiveQuestion: cln(`${linkVerb} ${subjectArticle} ${subjectNoun} ${adj} ${objectArticle} ${objectNoun}?`),
-    negativeQuestion: cln(`${linkVerb} ${subjectArticle} ${subjectNoun} not ${adj} ${objectArticle} ${objectNoun}?`),
+    positiveQuestion: cln(`${linkVerb} ${subjectArticle} ${subjectNoun} ${adj} ${objectArticle} ${objectNoun}? ${post}`),
+    negativeQuestion: cln(`${linkVerb} ${subjectArticle} ${subjectNoun} not ${adj} ${objectArticle} ${objectNoun}? ${post}`),
     positiveStatement: cln(`${subjectNoun} ${linkVerb} ${adj} ${objectNoun}`),
     negativeStatement: cln(`${subjectNoun} ${linkVerb} not ${adj} ${objectNoun}`),
     positiveShort: cln(`${subjectNoun} ${shortLinkVerb} ${adj}`),
@@ -541,7 +591,7 @@ function naturalizePredicate(predicate, subjectNoun, objectNoun) {
     positiveVerb: cln(`${shortLinkVerb} ${adj}`),
     negativeVerb: cln(`${shortLinkVerb} not ${adj}`),
     bigQuestion: <>
-      {linkVerb} {subjectArticle} <Big v='outlined'>{subjectNoun}</Big> <Big v='soft'>{adj}</Big> {objectArticle} <Big v='outlined'>{objectNoun}</Big>?
+      {linkVerb} {subjectArticle} <Big v='outlined'>{subjectNoun}</Big> <Big v='soft'>{adj}</Big> {objectArticle} <Big v='outlined'>{objectNoun}</Big> {post}?
     </>
   };
 }
