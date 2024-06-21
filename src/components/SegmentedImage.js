@@ -153,6 +153,7 @@ const SegmentedImage = ({ src, polygons, label, correct, children, width = 854, 
             fontSize: '1em',
             fontWeight: 'bold',
             borderRadius: 'md',
+            textWrap: 'nowrap',
 
         }}>
             {correct ? '✅' : correct === false ? '❌' : ''}&nbsp;
