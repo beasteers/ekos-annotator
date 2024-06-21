@@ -104,5 +104,5 @@ You have to purge their cache
 
 Go to https://www.jsdelivr.com/tools/purge
 ```
-
+https://cdn.jsdelivr.net/gh/beasteers/ekos-annotator@main/build/bundle.js
 ```
