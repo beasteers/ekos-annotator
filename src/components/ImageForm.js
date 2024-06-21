@@ -14,6 +14,7 @@ import ExampleGrid from './ExampleGrid';
 import theme from '../theme';
 import { CssVarsProvider, extendTheme } from '@mui/joy/styles';
 import { Sheet } from '@mui/joy';
+import { turkGetParam, turkGetSubmitToHost } from './externalHIT_v1';
 
 
 /* ---------------------------------- Utils --------------------------------- */
@@ -30,7 +31,9 @@ const ImageForm = ({
     children, help, 
     images,
     page, total, 
+    id,
     action, 
+    method='get',
     assignmentId, batchId,
     baseUrl,
     onSubmit,
@@ -52,13 +55,13 @@ const ImageForm = ({
       <CssVarsProvider defaultMode="dark" modeStorageKey="image-ann-color-mode" theme={theme}>
         <CssBaseline />
         <Box p={2}>
-        <form action={action} onSubmit={e => {
+        <form id={id} method={method} action={(action == 'local' ? action || turkGetSubmitToHost() : null)} onSubmit={e => {
           submitTimeRef.current.value = Date.now();
         }}>
             <input type='hidden' value="" name='submitTime' ref={submitTimeRef} />
             {/* Metadata */}
             <FormMeta {...{ page: page+1, batchId, startTime, ...formMeta }} />
-            <input type='hidden' value={assignmentId} name='assignmentId' id='assignmentId'/>
+            <input type='hidden' value={assignmentId || turkGetParam("assignmentId", "")} name='assignmentId' id='assignmentId'/>
             <Stack spacing={1}>
               {help}
               {children}
