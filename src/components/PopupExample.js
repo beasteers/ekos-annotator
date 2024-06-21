@@ -9,10 +9,11 @@ import { Box } from '@mui/joy';
 
 export default function PopupExample({ message, color, buttonText='Open', defaultOpen=false, modalKey='ekos-annotation-popup-seen', buttonVariant='solid', children }) {
   // localStorage.setItem(modalKey, '');
-  const [open, setOpen] = React.useState(() => {
-    const modalSession = modalKey && localStorage.getItem(modalKey);
-    return defaultOpen && !modalSession;
-  });
+  // const [open, setOpen] = React.useState(() => {
+  //   const modalSession = modalKey && localStorage.getItem(modalKey);
+  //   return defaultOpen && !modalSession;
+  // });
+  const [open, setOpen] = React.useState(defaultOpen);
   return (
     <React.Fragment>
         <Alert color={color} onClick={() => setOpen(true)} sx={{ cursor: 'pointer', py: 1, px: 1, fontWeight: 900 }}>
@@ -27,7 +28,7 @@ export default function PopupExample({ message, color, buttonText='Open', defaul
         open={open}
         onClose={() => {
           setOpen(false);
-          modalKey && localStorage.setItem(modalKey, modalKey);
+          // modalKey && localStorage.setItem(modalKey, modalKey);
         }}
         sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
       >

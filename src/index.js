@@ -2,7 +2,7 @@ import habitat from 'preact-habitat';
 // import Widget from './app';
 // import Task from './components';
 function Task({ ...p }) {
-    return (<h1>Hi {JSON.stringify(p)}</h1>)
+    return (<h1>Hi</h1>)
   }
 
 // habitat render docs: https://github.com/zouhir/preact-habitat#api-docs
