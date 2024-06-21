@@ -20,7 +20,7 @@ export default function App({ pageSize=6, seed=12345, ...props }) {
     // const { nouns, pageData, total } = useFullCsv(`/mturk_batches_${props.task}.json`, { noun, page, pageSize, seed });
     const { options, pageData, total } = useBatchCsv(`/mturk_batches_${task}.csv`, { group, page, pageSize, seed, batchKey: TASK_KEY[task] });
 
-    const { data: nounData } = useCsv(`/EPIC_100_noun_classes_v2.csv`);
+    // const { data: nounData } = useCsv(`/EPIC_100_noun_classes_v2.csv`);
     // console.log(nounData)
     // let aliases = React.useMemo(() => 
     //   nounData?.reduce((o, x) => (x.key?{...o, [fixNounFormat(x.key)]: JSON.parse(x.instances.replaceAll("'", '"')).filter(k=>k!=x.key).map(fixNounFormat)}:o), {})

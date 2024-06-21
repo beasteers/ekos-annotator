@@ -355,6 +355,9 @@ const InstructionsTask2 = ({ baseUrl }) => {
         <T level='h1' sx={{ my: 4 }}>
           Evaluate the statement
         </T>
+        <T level='h1' sx={{ my: 4 }}>
+          e.g. "Is the onion cut?"
+        </T>
 
         <T level='h4' sx={{ fontWeight: 400 }} mb={4} textAlign='center'>
         <T level='h3' sx={{ fontWeight: 900 }}>POV: </T>
@@ -364,8 +367,8 @@ const InstructionsTask2 = ({ baseUrl }) => {
 
         <T level='h3' sx={{ fontWeight: 900 }}>Objective: </T>
         <T level='h4' sx={{ fontWeight: 400 }} mb={2} textAlign='center'>
-        Your task is to verify that the statement is true about a referenced object in the scene. If there are multiple of the same object,
-        the statement only needs to be true about one of them.
+        Your task is to verify that the statement is true about a referenced object in the scene. <br/>
+        If there are multiple of the same object, the statement only needs to be true about one of them.
         </T>
         </Box>
 
@@ -431,8 +434,6 @@ export function Task2(props) {
     bigQuestion, question, statement, positive, positiveQuestion, negativeQuestion, positiveStatement, negativeStatement, positiveShort, negativeShort
   } = naturalizePredicate(state, noun);
 
-  let pos = useMemo(() => T2_POS_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [T2_POS_EXAMPLES, baseUrl])
-  let neg = useMemo(() => T2_NEG_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [T2_NEG_EXAMPLES, baseUrl])
   return <ImageForm {...props} 
                     optionLabels={{ correct: positiveShort, wrong: negativeShort }} 
                     formMeta={{ noun, state, group }} 

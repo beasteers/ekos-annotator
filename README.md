@@ -67,7 +67,7 @@ Keywords: image, classification, batch, assess, quality, predicates, logic, obje
 
 <script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
 <form method='post' id='mturk_form' action='https://workersandbox.mturk.com/mturk/externalSubmit'>
-	<input type="hidden" name="assignmentId" />
+	<input type="hidden" id="assignmentId" name="assignmentId" />
     <input type="hidden" name"answer" />
 </form>
 <script language='Javascript'>turkSetAssignmentID()</script>
