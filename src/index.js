@@ -1,16 +1,13 @@
 import habitat from 'preact-habitat';
-import Widget from './app';
-import Task from './components';
+// import Widget from './app';
+// import Task from './components';
+function Task({ ...p }) {
+    return (<h1>Hi {JSON.stringify(p)}</h1>)
+  }
 
 // habitat render docs: https://github.com/zouhir/preact-habitat#api-docs
-let render;
-if(process.env.NODE_ENV === 'production') {
-    console.log("rendering prod widget");
-    ({ render } = habitat(Task));
-} else {
-    console.log("rendering dev widget");
-    ({ render } = habitat(Widget));
-}
+const { render } = habitat(Task);
+// const { render } = habitat(Widget);
 /**
  * option 1: render inline - just add the script inside the HTML element that you want to render in. 
  * 
