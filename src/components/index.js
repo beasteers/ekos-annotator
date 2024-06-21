@@ -51,143 +51,6 @@ const imageProcess = (img, { baseUrl }) => ({...img, src: img.src || `${baseUrl|
 /*                       Task 1: Mask Quality Assessment                      */
 /* -------------------------------------------------------------------------- */
 
-const T1_POS_EXAMPLES = [
-  {
-    "file_name": "P02_128_58_6020_pre_xmem_spoon.jpg",
-    "noun": "spoon", "label": "correct",
-    "description": "Most of the spoon is segmented, but the handle is not."
-  },
-  {
-    "file_name": "P30_107_525_78555_pre_xmem_fork.jpg",
-    "noun": "fork", "label": "correct",
-    "description": "The object is difficult to see, but given the context, you can reasonably guess it is a fork."
-  },
-  {
-    "file_name": "P04_03_137_30049_pre_xmem_drawer.jpg",
-    "noun": "drawer", "label": "correct",
-    "description": "If the segmentation contains multiple of an object (e.g. multiple drawers in a fridge), it can be considered correct."
-  },
-  {
-    "file_name": "P30_107_626_96660_mid_xmem_choi:pak.jpg",
-    "noun": "pak choi", "label": "correct",
-    "description": "The object segmented is pak choi."
-  },
-  {
-    "file_name": "P30_107_918_149015_mid_egohos_cupboard.jpg",
-    "noun": "cupboard", "label": "correct",
-    "description": "The object segmented is the edge of the cupboard."
-  },
-  {
-    "file_name": "P30_07_21_2916_mid_xmem_mug.jpg",
-    "noun": "mug", "label": "correct",
-    "description": "The mug is segmented."
-  },
-  {
-    "file_name": "P02_03_126_21779_pre_xmem_onion.jpg",
-    "noun": "onion", "label": "correct",
-    "description": "Looks like an onion."
-  }
-].map(d => ({src: `/images/frames/${d.file_name}`, ...d}))
-const T1_NEG_EXAMPLES = [
-  {
-      "file_name": "P09_106_13_3589_mid_xmem_juice.jpg",
-      "noun": "juice", "label": "incorrect",
-      "description": "The juice is not highlighted, something else in the fridge is."
-  },
-  {
-      "file_name": "P30_107_918_148955_pre_xmem_cupboard.jpg",
-      "noun": "cupboard", "label": "incorrect",
-      "description": "The highlighted object is cutlery, not a cupboard."
-  },
-  {
-      "file_name": "P25_09_78_34912_pre_xmem_sponge.jpg",
-      "noun": "sponge", "label": "incorrect",
-      "description": "Dish soap is segmented instead of the sponge."
-  }
-].map(d => ({src: `/images/frames/${d.file_name}`, ...d}))
-
-
-const T2_POS_EXAMPLES = [].map(d => ({src: `/images/frames/${d.file_name}`, ...d}))
-const T2_NEG_EXAMPLES = [].map(d => ({src: `/images/frames/${d.file_name}`, ...d}))
-
-
-function Task1Help() {
-  return (<Stack spacing={1} direction='row' justifyContent='center' alignItems='center'>
-    <PopupExample message={<>
-    {/* What does <Bo c="success">correct</Bo> or <Bo c="danger">incorrect</Bo> look like? */}
-     Guidelines & Examples
-    </>} color='primary'>
-    <Typography level='h4'>
-      Examples of <Bo c="success">Correct</Bo> Annotations
-    </Typography>
-    <div>
-      {POS_EXAMPLES.map(({ src, label, description }) => (
-        <LabeledImage src={src} label={label}>{description}</LabeledImage>
-      ))}
-    </div>
-
-    <Typography level='h4'>
-      Examples of <Bo c="danger">Incorrect</Bo> Annotations
-    </Typography>
-    <div>
-      {NEG_EXAMPLES.map(({ src, label, description }) => (
-        <LabeledImage src={src} label={label} color='danger'>{description}</LabeledImage>
-      ))}
-    </div>
-
-    <div>
-      <Typography level='h4'>
-      Description:
-      </Typography>
-      <ul>
-        <li>Does the noun describe the content of the segmentation?</li>
-
-        <li>The precise boundaries of the object are less important, so if the object is partially segmented, it can still be considered correct.</li>
-
-        <li>If the segmentation also contains multiple similar objects, it can still be considered correct as long as the object of interest is segmented.</li>
-      </ul>
-      For ambiguous cases, consider the context of the image and use your best judgement.
-      
-    </div>
-
-    <Typography level='h4'>
-      The annotation is <b>Correct</b> when:
-    </Typography>
-    <ul>
-      <li>
-        The object is <Bo c="primary">present</Bo> and <Bo c="primary">segmented.</Bo>
-      </li>
-      <li>
-        The object is <Bo c="warning">not present</Bo> and <Bo c="warning">nothing is segmented.</Bo>
-      </li>
-      <li>
-        The precise boundaries of the object are less important, so if the object is partially segmented, it can still be considered correct.
-      </li>
-      <li>
-        If the segmentation also contains multiple similar objects, it can still be considered correct as long as the object of interest is segmented.
-      </li>
-    </ul>
-
-    <Typography level='h4'>
-    The annotation is <b>Incorrect</b> when:
-    </Typography>
-    <ul>
-      <li>
-        The object is <Bo c="primary">present</Bo> and <Bo c="warning">not segmented.</Bo>
-      </li>
-      <li>
-      Something else is <Bo c="primary">segmented.</Bo>
-      </li>
-      <li>
-        If the segmentation also contains multiple different objects, it should be considered incorrect
-      </li>
-    </ul>
-  </PopupExample>
-  </Stack>)
-}
-
-
-
 const InstructionsTask1 = ({ baseUrl }) => {
   const EXAMPLES = [
     {
@@ -317,7 +180,7 @@ const InstructionsTask1 = ({ baseUrl }) => {
     },
     {
       title: 'Difficult to see',
-      description: 'The image is really blurry/low-light, but given the context, you can use your best judgement.',
+      description: 'The image is really blurry/low-light, but given the context, take your best guess.',
       images: [
         {
           file_name:"P28_06_22_5257.jpg",
@@ -365,7 +228,7 @@ const InstructionsTask1 = ({ baseUrl }) => {
       }}>
         <Box textAlign='center' sx={{ px: 6 }}>
         <T level='h1' sx={{ my: 4 }}>
-          Classify the highlighted object
+          Verify the highlighted object
         </T>
 
         <T level='h4' sx={{ fontWeight: 400 }} mb={4} textAlign='center'>
@@ -442,7 +305,7 @@ const InstructionsTask1 = ({ baseUrl }) => {
           </ul>
         </T> */}
         <T level='h3'  textAlign='center' my={5} pt={5}>
-          Thank you for your attention to detail and for helping with this annotation task!
+          Thanks! ✨
         </T>
       </Sheet>
 
@@ -522,7 +385,7 @@ const InstructionsTask2 = ({ baseUrl }) => {
         ))}
 
         <T level='h3'  textAlign='center' my={5} pt={5}>
-          Thank you for your attention to detail and for helping with this annotation task!
+          Thanks! ✨
         </T>
       </Sheet>
 
@@ -533,26 +396,10 @@ const InstructionsTask2 = ({ baseUrl }) => {
 
 export function Task1(props) {
   const { noun, group, baseUrl, aliases } = props;
-  // let pos = useMemo(() => T1_POS_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [T1_POS_EXAMPLES, baseUrl])
-  // let neg = useMemo(() => T1_NEG_EXAMPLES?.map(d => imageProcess(d, { baseUrl })), [T1_NEG_EXAMPLES, baseUrl])
   return <ImageForm {...props} 
                     optionLabels={{ correct: noun, wrong: `not ${noun}` }} 
                     formMeta={{ noun, group }} 
                     help={<>
-
-    <Box display='flex' gap={2} alignItems='start'>
-      {/* <ExampleGrid images={pos}>
-        <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
-        Examples of <Bo c="success">Correct</Bo> Annotations
-        </Typography>
-      </ExampleGrid>
-      <ExampleGrid images={neg}>
-        <Typography variant='h6' textAlign='center' mt={1} mb={0.5}>
-        Examples of <Bo c="danger">Incorrect</Bo> Annotations
-        </Typography>
-      </ExampleGrid> */}
-    </Box>
-
   </>}>
 
     <LabelBox button={<InstructionsTask1 baseUrl={baseUrl} />}>
@@ -599,26 +446,9 @@ export function Task2(props) {
           alignItems: 'center',
           flexWrap: 'wrap',
         }}>
-        {/* Is the
-        <Typography sx={{ fontSize: '1.8em' }}>
-          <Co>[</Co><b>{noun || 'object'}</b><Co>]</Co>
-        </Typography>
-        <Typography sx={{ fontSize: '1.8em' }}>
-          <Co>[</Co><b>{state || '—'}</b><Co>]</Co>
-        </Typography>? */}
-        {/* {question} */}
         {bigQuestion}
         {/* {positiveQuestion} */}
       </Typography>
-      {/* <Box>
-        <Chip>{state}</Chip>
-      </Box>
-      <LabelBox title="pre">
-        {PDDL.actions[state]?.preconditions.map(p => <Chip>{p}</Chip>)}
-      </LabelBox>
-      <LabelBox title="post">
-        {PDDL.actions[state]?.effects.map(p => <Chip>{p}</Chip>)}
-      </LabelBox> */}
     </LabelBox>
   </ImageForm>
 }

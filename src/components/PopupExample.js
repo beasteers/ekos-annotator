@@ -7,8 +7,12 @@ import Sheet from '@mui/joy/Sheet';
 import Alert from '@mui/joy/Alert';
 import { Box } from '@mui/joy';
 
-export default function PopupExample({ message, color, buttonText='Open', defaultOpen=false, buttonVariant='solid', children }) {
-  const [open, setOpen] = React.useState(defaultOpen);
+export default function PopupExample({ message, color, buttonText='Open', defaultOpen=false, modalKey='ekos-annotation-popup-seen', buttonVariant='solid', children }) {
+  // localStorage.setItem(modalKey, '');
+  const [open, setOpen] = React.useState(() => {
+    const modalSession = modalKey && localStorage.getItem(modalKey);
+    return defaultOpen && !modalSession;
+  });
   return (
     <React.Fragment>
         <Alert color={color} onClick={() => setOpen(true)} sx={{ cursor: 'pointer', py: 1, px: 1, fontWeight: 900 }}>
@@ -21,7 +25,10 @@ export default function PopupExample({ message, color, buttonText='Open', defaul
         </Alert>
       <Modal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+          modalKey && localStorage.setItem(modalKey, modalKey);
+        }}
         sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
       >
         <Sheet
