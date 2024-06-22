@@ -1,13 +1,17 @@
 import habitat from 'preact-habitat';
-// import Widget from './app';
+import Widget from './app';
 import Task from './components';
-// function Task({ ...p }) {
-//     return (<h1>Hi</h1>)
-//   }
 
 // habitat render docs: https://github.com/zouhir/preact-habitat#api-docs
 const { render } = habitat(Task);
 // const { render } = habitat(Widget);
+
+
+
+
+// function Task({ ...p }) {
+//     return (<h1>Hi</h1>)
+//   }
 /**
  * option 1: render inline - just add the script inside the HTML element that you want to render in. 
  * 

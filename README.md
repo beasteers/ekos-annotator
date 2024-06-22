@@ -11,27 +11,31 @@ Description: You will be presented with a batch of images with object masks draw
 Keywords: image, classification, batch, assess, quality, automatic, object, masks
 
 ```html
-<div class="ekos-annotator">
-	<script type="application/json">
+<form>
+	<div class="ekos-annotator">
+		<script type="application/json">
 			{
-        "task": "noun",
-				"noun": "$noun",
-			  "baseUrl": "https://ekos-mturk-test-samples.s3.us-east-2.amazonaws.com/frames",
+				"baseUrl": "https://ekos-mturk-test-samples.s3.us-east-2.amazonaws.com/mturk_images_noun",
+				"noun": "${noun}",
+				"task": "noun",
+				"batchId": "${batchId}",
 				"images": [
-					{"file_name": "$image_1_file_name"},
-					{"file_name": "$image_2_file_name"},
-					{"file_name": "$image_3_file_name"},
-					{"file_name": "$image_4_file_name"},
-					{"file_name": "$image_5_file_name"},
-					{"file_name": "$image_6_file_name"},
-					{"file_name": "$image_7_file_name"},
-					{"file_name": "$image_8_file_name"},
-					{"file_name": "$image_9_file_name"}
+					{ "file_name": "${image_1_file_name}", "polygons": ${image_1_polygons}, "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_2_file_name}", "polygons": ${image_2_polygons}, "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_3_file_name}", "polygons": ${image_3_polygons}, "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_4_file_name}", "polygons": ${image_4_polygons}, "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_5_file_name}", "polygons": ${image_5_polygons}, "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_6_file_name}", "polygons": ${image_6_polygons}, "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_7_file_name}", "polygons": ${image_7_polygons}, "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_8_file_name}", "polygons": ${image_8_polygons}, "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_9_file_name}", "polygons": ${image_9_polygons}, "bullshit": "asdfasdf fixes parse error" }
 				]
 			}
-		  </script>
+			</script>
 	</div>
-<script src="https://cdn.jsdelivr.net/gh/beasteers/ekos-annotator@main/build/bundle.js" data-mount-in=".ekos-annotator" type="text/javascript"></script>
+	<script src="https://cdn.jsdelivr.net/gh/beasteers/ekos-annotator@v0.0.3/build/bundle.js" data-mount-in=".ekos-annotator" type="text/javascript"></script>
+    <input type="submit" style="display: none" name="mturk_submit" disabled style="display: none" />
+</form>
 ```
 
 ### Task 2: Predicates
@@ -43,61 +47,32 @@ Description: You will be presented with a batch of images. You must assess wheth
 Keywords: image, classification, batch, assess, quality, predicates, logic, object, state
 
 ```html
-
-<div class="ekos-annotator">
-	<script type="application/json">
+<form>
+	<div class="ekos-annotator">
+		<script type="application/json">
 			{
-			    "baseUrl": "https://ekos-mturk-test-samples.s3.us-east-2.amazonaws.com/frames",
-				"noun": "onion",
+				"baseUrl": "https://ekos-mturk-test-samples.s3.us-east-2.amazonaws.com/mturk_images_predicate",
+				"noun": "${noun}",
+				"state": "${state}",
+				"task": "predicate",
+				"batchId": "${batchId}",
 				"images": [
-					{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"},
-					{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"},
-					{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"},
-					{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"},
-					{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"},
-					{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"},
-					{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"},
-					{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"},
-					{"file_name": "P02_03_126_23186_post_xmem_onion.jpg"}
+					{ "file_name": "${image_1_file_name}", "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_2_file_name}", "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_3_file_name}", "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_4_file_name}", "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_5_file_name}", "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_6_file_name}", "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_7_file_name}", "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_8_file_name}", "bullshit": "asdfasdf fixes parse error" },
+					{ "file_name": "${image_9_file_name}", "bullshit": "asdfasdf fixes parse error" }
 				]
 			}
-		  </script>
+		</script>
 	</div>
-<script src="https://cdn.jsdelivr.net/gh/beasteers/ekos-annotator@main/build/bundle.js" data-mount-in=".ekos-annotator" type="text/javascript"></script>
-
-<script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
-<form method='post' id='mturk_form' action='https://workersandbox.mturk.com/mturk/externalSubmit'>
-	<input type="hidden" id="assignmentId" name="assignmentId" />
-    <input type="hidden" name"answer" />
+	<script src="https://cdn.jsdelivr.net/gh/beasteers/ekos-annotator@v0.0.3/build/bundle.js" data-mount-in=".ekos-annotator" type="text/javascript"></script>
+    <input type="submit" style="display: none" name="mturk_submit" disabled style="display: none" />
 </form>
-<script language='Javascript'>turkSetAssignmentID()</script>
-
-<script type="text/javascript">
-function dumpForm(form) {
-  return (
-    [...new FormData(form).entries()].reduce((acc, [key, value]) => {
-      acc[key] = acc[key] ? [].concat(acc[key], value) : value;
-      return acc;
-    }, {})
-  );
-}
-document.addEventListener('DOMContentLoaded', function() {
-    // Select all forms with class 'ekos-annotator' and their submit buttons
-    const form = document.querySelectorAll('.ekos-annotator form')[0];
-    const outForm = document.querySelectorAll('.ekos-annotator form')[0];
-    console.log(dumpForm(form))
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const formData = dumpForm(form);
-        console.log(formData);
-
-        const answerInput = outForm.querySelector('input[name=answer]');
-        answerInput.value = JSON.stringify(formData);
-        // outForm.submit();
-    });
-});
-</script>
 ```
 ## Update jsdelivr
 You have to purge their cache

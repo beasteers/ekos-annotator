@@ -107,6 +107,9 @@ const ImageFormContent = ({
 
   const isFinalPage = page == null || page+1 == total;
   const assignmentId = turkGetParam("assignmentId", "");
+  const workerId = turkGetParam("workerId", "");
+  const hitId = turkGetParam("hitId", "");
+  const mode = turkGetParam("mode", "");
   const disabled = assignmentId == 'ASSIGNMENT_ID_NOT_AVAILABLE';
 
   return (
@@ -114,7 +117,12 @@ const ImageFormContent = ({
         <input type='hidden' value="" name='submitTime' ref={submitTimeRef} />
           {/* Metadata */}
           <FormMeta {...{ page: page+1, startTime, ...formMeta }} />
-          {assignmentId && <input type='hidden' value={assignmentId} name='assignmentId' id='assignmentId'/>}
+          {/* MT seems to handle these itself */}
+          {assignmentId && <input type='hidden' value={assignmentId} name='mt_assignmentId' />}
+          {workerId && <input type='hidden' value={workerId} name='mt_workerId' />}
+          {hitId && <input type='hidden' value={hitId} name='mt_hitId' />}
+          {mode && <input type='hidden' value={mode} name='mt_mode' />}
+          
           <Stack spacing={1}>
             {help}
             {children}
@@ -135,7 +143,7 @@ const ImageFormContent = ({
 }
 const ImageFormWrapper = (props) => {
   return (
-    <CssVarsProvider defaultMode="system" modeStorageKey="image-ann-color-mode" theme={theme}>
+    <CssVarsProvider defaultMode="light" modeStorageKey="ekos-annotator-color-mode" theme={theme}>
       <CssBaseline />
     <ImageFormContent {...props} />
     </CssVarsProvider>

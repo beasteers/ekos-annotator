@@ -6,6 +6,7 @@ import Button from '@mui/joy/Button';
 import Box from '@mui/joy/Box';
 import B from '@mui/joy/Box';
 import Chip from '@mui/joy/Chip';
+import Tooltip from '@mui/joy/Tooltip';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
@@ -36,13 +37,16 @@ const Co = styled.span`
 `
 const Bo = ({ c='primary', children, ...p }) => <Typography variant="soft" color={c} fontWeight={700} noWrap {...p}>{children}</Typography>
 
-const Big = ({ children, v='soft', c='primary' }) => (
-  children && <Chip color={c} variant={v} sx={{ fontSize: '1.8em', mx: 1, px: 2 }}>
-    {/* <Co>[</Co> */}
-    <b>{children}</b>
-    {/* <Co>]</Co> */}
-  </Chip>
-)
+
+const Big = ({ children, v='soft', c='primary', tooltip }) => {
+  return children && <Tooltip title={tooltip} color={c} variant="soft" arrow>
+    <Chip color={c} variant={v} sx={{ fontSize: '1.8em', mx: 1, px: 2 }}>
+      {/* <Co>[</Co> */}
+      <b>{children}</b>
+      {/* <Co>]</Co> */}
+    </Chip>
+  </Tooltip>
+}
 
 const imageProcess = (img, { baseUrl }) => ({...img, src: img.src || `${baseUrl||''}/${img.file_name.replace(/^\//, '')}`})
 
@@ -348,8 +352,8 @@ const InstructionsTask1 = ({ baseUrl }) => {
 const InstructionsTask2 = ({ baseUrl }) => {
   const EXAMPLES = [
     {
-      title: 'Simple Cases',
-      description: 'The object is clearly visible and easy to classify.',
+      // title: 'Simple Cases',
+      // description: 'The object is clearly visible and easy to classify.',
       images: [
         {
           "file_name":"P04_02_238_67186.jpg",
@@ -378,7 +382,7 @@ const InstructionsTask2 = ({ baseUrl }) => {
           label: 'aubergine held', correct: true,
         },
         {
-          file_name:"P01_09_482_121455.jpg",
+          file_name:"P25_107_304_71971.jpg",
           label: 'aubergine held', correct: false,
         },
       ],
@@ -389,15 +393,15 @@ const InstructionsTask2 = ({ baseUrl }) => {
       images: [
         {
           file_name:"P28_02_132_23873.jpg",
-          label: 'aubergine held', correct: true,
+          label: 'washing liquid above', correct: true,
         },
         {
-          file_name:"P25_107_73_27189.jpg",
-          label: 'aubergine held', correct: true,
+          file_name:"P30_05_602_158778.jpg",
+          label: 'carrot peeled', correct: true,
         },
         {
-          file_name:"P01_09_482_121455.jpg",
-          label: 'aubergine held', correct: false,
+          file_name:"P25_107_95_35495.jpg",
+          label: 'aubergine flipped', correct: true,
         },
       ],
     },
@@ -443,7 +447,8 @@ const InstructionsTask2 = ({ baseUrl }) => {
         <T level='h3' sx={{ fontWeight: 900 }}>Objective: </T>
         <T level='h4' sx={{ fontWeight: 400 }} mb={2} textAlign='center'>
         Your task is to verify that the statement is true about a referenced object in the scene. <br/>
-        If there are multiple of the same object, the statement only needs to be true about one of them.
+        If there are multiple of the same object, the statement only needs to be true about one of them. <br/>
+        Place special focus on the object that the person is interacting with.
         </T>
         </Box>
 
@@ -469,6 +474,43 @@ const InstructionsTask2 = ({ baseUrl }) => {
 
     </PopupExample>
   </Stack>)
+}
+
+const EXPLANATIONS = {
+  adj: {
+    "above": "over",
+    "active": "turned on, running",
+    "can-fit": "can be put inside of something",
+    "clean": "not dirty, not covered in food/waste",
+    "cut": "chopped, sliced",
+    "deformed": "bent, squished",
+    "flipped": "turned over",
+    "full": "containing something",
+    "held": "held in hand, held with a tool (e.g. spatula)",
+    "in": "is inside something",
+    "is-bendable": "can be bent",
+    "is-container": "can be used as a container",
+    "is-deformable": "can be deformed",
+    "is-flippable": "can be flipped",
+    "is-fluid": "is a liquid",
+    "is-holdable": "can be held",
+    "is-mixable": "can be mixed, stirred",
+    "is-openable": "can be opened",
+    "is-peelable": "can be peeled",
+    "is-rigid": "is solid, firm",
+    "is-spreadable": "can be spread, smeared",
+    "is-tearable": "can be torn, ripped",
+    "mixed": "stirred, blended",
+    "on": "on top of something",
+    "onsurface": "on top of a surface",
+    "open": "not closed",
+    "peeled": "peel/skin removed",
+    "stretched": "pulled, elongated, spread",
+    "torn": "ripped, cut",
+    "touching": "in contact with",
+    "twisted": "contorted, rotated",
+    "wet": "has water on or in it"
+  }
 }
 
 
@@ -506,8 +548,9 @@ export function Task2(props) {
   console.log(props)
   const { noun, state, group, baseUrl, aliases } = props;
   const {
-    bigQuestion, question, statement, positive, positiveQuestion, negativeQuestion, positiveStatement, negativeStatement, positiveShort, negativeShort
+    bigQuestion, fullAdj, question, statement, positive, positiveQuestion, negativeQuestion, positiveStatement, negativeStatement, positiveShort, negativeShort
   } = naturalizePredicate(state, noun);
+  console.log(fullAdj, EXPLANATIONS[fullAdj], EXPLANATIONS)
 
   return <ImageForm {...props} 
                     optionLabels={{ correct: positiveShort, wrong: negativeShort }} 
@@ -537,12 +580,13 @@ function pluralSuffix(word) {
 
 function naturalizePredicate(predicate, subjectNoun, objectNoun) {
   if(!predicate) return {};
-  const regex = /(?:\((not ))?\((?:(is|can)-)?([\w-]+)\s+([?\w\s]+)\)+/g;
+  const regex = /(?:\((not ))?\(((?:(is|can)-)?([\w-]+))\s+([?\w\s]+)\)+/g;
   const match = regex.exec(predicate);
+  console.log(match);
 
-  let not, linkVerb, shortLinkVerb, adj, object, args, subjectArticle, objectArticle, post;
+  let not, linkVerb, shortLinkVerb, adj, object, args, subjectArticle, objectArticle, post, fullAdj;
   if (match) {
-    [, not, linkVerb, adj, args] = match;
+    [, not, fullAdj, linkVerb, adj, args] = match;
     [, object] = args?.split(' ');
   } else {
     adj = predicate.split('?')[0].replace(/[()]/g,'');
@@ -577,6 +621,7 @@ function naturalizePredicate(predicate, subjectNoun, objectNoun) {
   
   const cln = q => q.replace(/\s+([\s?])/g, '$1').trim();
   return {
+    fullAdj,
     // is the onion not touching a hand?
     question: cln(`${linkVerb} ${subjectArticle} ${subjectNoun} ${not} ${adj} ${objectArticle} ${objectNoun}? ${post}`),
     // onion not touching hand
@@ -591,7 +636,7 @@ function naturalizePredicate(predicate, subjectNoun, objectNoun) {
     positiveVerb: cln(`${shortLinkVerb} ${adj}`),
     negativeVerb: cln(`${shortLinkVerb} not ${adj}`),
     bigQuestion: <>
-      {linkVerb} {subjectArticle} <Big v='outlined'>{subjectNoun}</Big> <Big v='soft'>{adj}</Big> {objectArticle} <Big v='outlined'>{objectNoun}</Big> {post}?
+      {linkVerb} {subjectArticle} <Big v='outlined'>{subjectNoun}</Big> <Big v='soft' tooltip={EXPLANATIONS.adj[fullAdj]}>{adj}</Big> {objectArticle} <Big v='outlined'>{objectNoun}</Big> {post}?
     </>
   };
 }

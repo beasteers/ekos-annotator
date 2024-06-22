@@ -6,7 +6,7 @@ module.exports = (env, argv) => {
   const { prod } = env;
   return {
     context: path.resolve(__dirname, 'src'),
-    entry: './index.js',
+    entry: prod ? './index.prod.js' : './index.dev.js',
     mode: prod ? 'production' : 'development',
   
     output: {
