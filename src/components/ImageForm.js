@@ -101,11 +101,12 @@ const ImageFormContent = ({
 }) => {
   images = useMemo(() => images?.map(d => imageProcess(d, { baseUrl })), [images, baseUrl])
   page = page == null && total != null ? 0 : page;
+  page = isNaN(page) ? null : page+1;
 
   const { current: startTime } = React.useRef(Date.now());
   const submitTimeRef = React.useRef();
 
-  const isFinalPage = page == null || page+1 == total;
+  const isFinalPage = page == null || page == total;
   const assignmentId = turkGetParam("assignmentId", "");
   const workerId = turkGetParam("workerId", "");
   const hitId = turkGetParam("hitId", "");
@@ -113,10 +114,10 @@ const ImageFormContent = ({
   const disabled = assignmentId == 'ASSIGNMENT_ID_NOT_AVAILABLE';
 
   return (
-      <Box p={2}>
+      <Box px={2}>
         <input type='hidden' value="" name='submitTime' ref={submitTimeRef} />
           {/* Metadata */}
-          <FormMeta {...{ page: page+1, startTime, ...formMeta }} />
+          <FormMeta {...{ page: page, startTime, ...formMeta }} />
           {/* MT seems to handle these itself */}
           {assignmentId && <input type='hidden' value={assignmentId} name='mt_assignmentId' />}
           {workerId && <input type='hidden' value={workerId} name='mt_workerId' />}
@@ -135,7 +136,7 @@ const ImageFormContent = ({
               onSubmit?.(e);
             }}>
               {disabled ? "You must ACCEPT the HIT before you can submit the results." :
-                (isFinalPage ? 'Submit' : `Next (${page+1}/${total || '-'})`)}
+                (isFinalPage ? 'Submit' : `Next (${page}/${total || '-'})`)}
             </Button>}
           </Stack>
       </Box>

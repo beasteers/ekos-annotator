@@ -81,3 +81,14 @@ Go to https://www.jsdelivr.com/tools/purge
 ```
 https://cdn.jsdelivr.net/gh/beasteers/ekos-annotator@main/build/bundle.js
 ```
+
+```
+function dumpForm(form) {
+  return (
+    [...new FormData(form).entries()].reduce((acc, [key, value]) => {
+      acc[key] = acc[key] ? [].concat(acc[key], value) : value;
+      return acc;
+    }, {})
+  );
+}
+```
