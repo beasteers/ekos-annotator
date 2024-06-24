@@ -33,7 +33,7 @@ Keywords: image, classification, batch, assess, quality, automatic, object, mask
 			}
 			</script>
 	</div>
-	<script src="https://cdn.jsdelivr.net/gh/beasteers/ekos-annotator@v0.0.3/build/bundle.js" data-mount-in=".ekos-annotator" type="text/javascript"></script>
+	<script src="https://cdn.jsdelivr.net/gh/beasteers/ekos-annotator@v0.0.5/build/bundle.js" data-mount-in=".ekos-annotator" type="text/javascript"></script>
     <input type="submit" style="display: none" name="mturk_submit" disabled style="display: none" />
 </form>
 ```
@@ -70,7 +70,7 @@ Keywords: image, classification, batch, assess, quality, predicates, logic, obje
 			}
 		</script>
 	</div>
-	<script src="https://cdn.jsdelivr.net/gh/beasteers/ekos-annotator@v0.0.3/build/bundle.js" data-mount-in=".ekos-annotator" type="text/javascript"></script>
+	<script src="https://cdn.jsdelivr.net/gh/beasteers/ekos-annotator@v0.0.5/build/bundle.js" data-mount-in=".ekos-annotator" type="text/javascript"></script>
     <input type="submit" style="display: none" name="mturk_submit" disabled style="display: none" />
 </form>
 ```

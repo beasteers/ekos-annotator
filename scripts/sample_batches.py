@@ -7,12 +7,15 @@ COLS = {
     'noun': 'noun',
     'predicate': 'state',
 }
+IGNORE_STATES = ['is-holdable']
 
 def main(fname, task, target_count=1000, page_size=500):
     # Load the CSV file
     df = pd.read_csv(fname).drop(columns=['Unnamed: 0'])
-    df.insert(0, 'batchId', np.arange(len(df)))
     column = COLS[task]
+    if task == 'predicate':
+        df = df[~df['state'].isin(IGNORE_STATES)]
+    df.insert(0, 'batchId', np.arange(len(df)))
 
     # Print the value counts
     print(f"Starting with {len(df)} {task} batches")

@@ -94,7 +94,6 @@ const ImageFormContent = ({
   images,
   page, total, 
   baseUrl,
-  onSubmit,
   optionLabels,
   formMeta,
   ...props
@@ -131,9 +130,8 @@ const ImageFormContent = ({
             <ImageGrid data={images} optionLabels={optionLabels} />
             {/* Submit */}
             {images && 
-            <Button type='submit' variant='soft' color='primary' disabled={disabled} sx={{ p: 1 }} onSubmit={e => {
+            <Button type='submit' variant='soft' color='primary' disabled={disabled} sx={{ p: 1 }} onClick={e => {
               submitTimeRef.current.value = Date.now();
-              onSubmit?.(e);
             }}>
               {disabled ? "You must ACCEPT the HIT before you can submit the results." :
                 (isFinalPage ? 'Submit' : `Next (${page}/${total || '-'})`)}
