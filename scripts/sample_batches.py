@@ -7,9 +7,9 @@ COLS = {
     'noun': 'noun',
     'predicate': 'state',
 }
-IGNORE_STATES = ['is-holdable']
+IGNORE_STATES = ['(is-holdable ?a)']
 
-def main(fname, task, target_count=1000, page_size=500):
+def main(fname, task, target_count=500, gt_count=50, page_size=500):
     # Load the CSV file
     df = pd.read_csv(fname).drop(columns=['Unnamed: 0'])
     column = COLS[task]
@@ -30,15 +30,20 @@ def main(fname, task, target_count=1000, page_size=500):
     df = df.sample(min(len(df), target_count))
     df = df.sort_values([column])
 
+    gt_df = df.sample(min(len(df), gt_count))
+
     # Print the value counts
     print(f"Sampled {len(df)} {task} batches")
     print(df[column].value_counts())
+    print(gt_df[column].value_counts())
 
     for i in range(0, len(df), page_size):
         df[i:i+page_size].to_csv(f'{os.path.dirname(fname)}/{task}_sampled_{i}.csv', index=False)
 
     # Save the sampled CSV file
     df.to_csv(f'{os.path.dirname(fname)}/{task}_sampled.csv', index=False)
+
+    gt_df.to_csv(f'{os.path.dirname(fname)}/{task}_gt.csv', index=False)
 
 
 if __name__ == '__main__':

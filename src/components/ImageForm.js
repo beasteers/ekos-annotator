@@ -2,6 +2,7 @@ import 'style/index.css';
 import * as React from 'react';
 import { useMemo } from 'react';
 import styled, { keyframes } from 'styled-components'
+import LinearProgress from '@mui/joy/LinearProgress';
 import Button from '@mui/joy/Button';
 import Box from '@mui/joy/Box';
 import Chip from '@mui/joy/Chip';
@@ -100,12 +101,13 @@ const ImageFormContent = ({
 }) => {
   images = useMemo(() => images?.map(d => imageProcess(d, { baseUrl })), [images, baseUrl])
   page = page == null && total != null ? 0 : page;
-  page = isNaN(page) ? null : page+1;
+  page = page == null || total == null || isNaN(page) ? null : page+1;
+  const isFinalPage = page == null || total == null || page == total;
+  const pct = isFinalPage ? 100 : page && total ? Math.round((Number(page)) / Number(total) * 100) : null;
 
   const { current: startTime } = React.useRef(Date.now());
   const submitTimeRef = React.useRef();
 
-  const isFinalPage = page == null || page == total;
   const assignmentId = turkGetParam("assignmentId", "");
   const workerId = turkGetParam("workerId", "");
   const hitId = turkGetParam("hitId", "");
@@ -130,12 +132,50 @@ const ImageFormContent = ({
             <ImageGrid data={images} optionLabels={optionLabels} />
             {/* Submit */}
             {images && 
-            <Button type='submit' variant='soft' color='primary' disabled={disabled} sx={{ p: 1 }} onClick={e => {
+            <Button type='submit' variant='soft' color='primary' disabled={disabled} sx={{ 
+              p: 1,
+              '&:hover .MuiTypography-variantSoft': {
+                backgroundColor: 'primary.softHoverBg',
+                // color: 'primary.softColor',
+                transition: 'background-color 0.2s ease-in-out'
+              }
+            }} onClick={e => {
               submitTimeRef.current.value = Date.now();
             }}>
               {disabled ? "You must ACCEPT the HIT before you can submit the results." :
-                (isFinalPage ? 'Submit' : `Next (${page}/${total || '-'})`)}
+                page == null ? "Submit" : (
+                  <LinearProgress
+                    determinate
+                    variant="plain"
+                    color="primary"
+                    size="sm"
+                    thickness={12}
+                    value={pct}
+                    sx={{
+                      // '--LinearProgress-radius': '20px',
+                      // '--LinearProgress-thickness': '24px',
+                    }}
+                  >
+                    <Typography
+                      // fontWeight="xl"
+                      // color="primary.solidColor"
+                      color="primary"
+                      variant="soft"
+                      sx={{ 
+                        zIndex: 1000, px: 1.5, borderRadius: 12, 
+                        // backdropFilter: 'blur(3px)', 
+                        // backgroundColor: `rgba(var(--joy-palette-primary-softBg), 1)` 
+                        // border: `rgba(var(--joy-palette-primary-softBg), 0.5) solid 4px`,
+                      }}
+                    >
+                      {(isFinalPage ? 'Finish' : `Next (${page} / ${total})`)}
+                    </Typography>
+                  </LinearProgress>
+                )}
             </Button>}
+            {/* `Next (${page}/${total || '-'})` */}
+
+            {/* {pct != null && } */}
           </Stack>
       </Box>
   )

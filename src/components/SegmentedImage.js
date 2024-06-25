@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import styled from 'styled-components';
 import Box from '@mui/joy/Box';
+import T from '@mui/joy/Typography';
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import IconButton from '@mui/joy/IconButton';
-import T from '@mui/joy/Typography';
-// import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import { useId } from 'preact/hooks';
 
 
 const ImageContainer = styled.div`

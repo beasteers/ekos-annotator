@@ -31,6 +31,7 @@ function JoyRadio({ value, setValue, fieldId, buttons=BUTTONS, defaultValue='cor
       {buttons.map(({ x, text, color, icon }) => (
         <Button key={x} value={x} color={color} variant={'outlined'} role="radio" tabIndex={x === value ? -1 : 0} sx={{
           // fontSize: x === value ? '1.3em' : '1em',
+          fontSize: '1.3em',
           flexGrow: 1,
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,

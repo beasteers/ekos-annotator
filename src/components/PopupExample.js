@@ -1,11 +1,11 @@
 import * as React from 'react';
+import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import Typography from '@mui/joy/Typography';
 import Sheet from '@mui/joy/Sheet';
 import Alert from '@mui/joy/Alert';
-import { Box } from '@mui/joy';
 
 export default function PopupExample({ message, color, buttonText='Open', defaultOpen=false, modalKey='ekos-annotation-popup-seen', buttonVariant='solid', children }) {
   // localStorage.setItem(modalKey, '');
@@ -30,12 +30,17 @@ export default function PopupExample({ message, color, buttonText='Open', defaul
           setOpen(false);
           // modalKey && localStorage.setItem(modalKey, modalKey);
         }}
-        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+        sx={{ 
+          display: 'flex', justifyContent: 'center', alignItems: 'center', 
+          // '& .MuiModal-backdrop': { zIndex: 2000 },
+          
+        }}
       >
         <Sheet
           variant="outlined"
           sx={{
-            maxWidth: '95vw',
+            width: '95vw',
+            maxWidth: '1900px',
             maxHeight: '90vh',
             borderRadius: 'md',
             // p: 3,
@@ -43,6 +48,7 @@ export default function PopupExample({ message, color, buttonText='Open', defaul
             boxShadow: 'lg',
             display: 'flex',
             flexDirection: 'column',
+            justifyContent: 'center',
           }}
         >
           <ModalClose variant="plain" sx={{ m: 1 }} />

@@ -1,0 +1,61 @@
+Batch 4. Do not judge on:
+{"file_name":"P30_07_5_761.jpg"}
+{"file_name":"P29_05_340_59385.jpg"}
+{"file_name":"P06_103_36_8586.jpg"}
+
+Batch 5. do not judge on:
+{"file_name":"P35_105_48_8767.jpg"}
+{"file_name":"P01_104_70_9051.jpg"}
+{"file_name":"P01_16_37_4952.jpg"}
+{"file_name":"P01_109_210_29335.jpg"}
+
+Batch 6. do not judge on:
+{"file_name":"P11_01_21_3691.jpg"}
+{"file_name":"P20_01_314_75115.jpg"}
+
+Batch 8. do not judge images:
+{"file_name":"P22_03_15_2884.jpg"}
+{"file_name":"P22_03_8_1032.jpg"}
+{"file_name":"P22_03_16_3075.jpg"}
+{"file_name":"P30_101_26_1979.jpg"}
+
+Batch 9. do not judge images:
+{"file_name":"P22_06_164_23665.jpg"}
+{"file_name":"P01_11_41_7417.jpg"}
+{"file_name":"P30_111_542_74146.jpg"}
+
+Batch 11. do not judge:
+{"file_name":"P07_12_13_3733.jpg"}
+{"file_name":"P35_101_80_16940.jpg"}
+
+Batch 12. do not judge:
+{"file_name":"P26_19_79_21773.jpg"}
+{"file_name":"P25_104_37_5416.jpg"}
+
+Batch 14. do not judge on:
+{"file_name":"P02_129_319_33375.jpg"}
+{"file_name":"P22_06_144_20217.jpg"}
+{"file_name":"P30_03_9_2039.jpg"}
+{"file_name":"P02_131_181_23766.jpg"}
+{"file_name":"P30_107_789_126537.jpg"}
+
+Batch 15. do not judge:
+{"file_name":"P30_107_733_116163.jpg"}
+
+Batch 16. do not judge:
+{"file_name":"P09_02_32_10419.jpg"}
+{"file_name":"P24_08_349_88885.jpg"}
+{"file_name":"P04_101_180_19839.jpg"}
+{"file_name":"P30_07_30_4362.jpg"}
+
+Batch 17. do not judge:
+{"file_name":"P08_18_115_29620.jpg"}
+{"file_name":"P27_105_31_5852.jpg"}
+
+Batch 19. do not judge:
+{"file_name":"P27_101_257_34422.jpg"}
+
+Batch 20. do not judge:
+{"file_name":"P01_105_39_2404.jpg"}
+{"file_name":"P30_08_3_778.jpg"}
+

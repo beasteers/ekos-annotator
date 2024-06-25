@@ -1,45 +1,39 @@
-import 'style/index.css';
 import * as React from 'react';
-import { useMemo } from 'react';
-import styled, { keyframes } from 'styled-components'
-import Button from '@mui/joy/Button';
-import Box from '@mui/joy/Box';
+import styled from 'styled-components'
 import B from '@mui/joy/Box';
+import Box from '@mui/joy/Box';
 import Chip from '@mui/joy/Chip';
+// import Button from '@mui/joy/Button';
 import Tooltip from '@mui/joy/Tooltip';
-import CssBaseline from '@mui/joy/CssBaseline';
 import Stack from '@mui/joy/Stack';
-import Typography from '@mui/joy/Typography';
+import Sheet from '@mui/joy/Sheet';
 import T from '@mui/joy/Typography';
+import Typography from '@mui/joy/Typography';
 import PopupExample from './PopupExample';
-import ImageGrid, { LabeledImage } from './ImageGrid';
+// import ImageGrid, { LabeledImage } from './ImageGrid';
 import SegmentedImage from './SegmentedImage';
-import ExampleGrid from './ExampleGrid';
-import theme from '../theme';
-import { CssVarsProvider, extendTheme } from '@mui/joy/styles';
-import { Sheet } from '@mui/joy';
+// import ExampleGrid from './ExampleGrid';
+// import theme from '../theme';
+// import CssBaseline from '@mui/joy/CssBaseline';
+// import { CssVarsProvider, extendTheme } from '@mui/joy/styles';
 import ImageForm, { LabelBox, KeyHints, DarkModeButton } from './ImageForm';
-// import PDDL from './PDDL';
 
-function App() {
-  return <CssVarsProvider theme={theme}>…</CssVarsProvider>;
-}
 
 /* ---------------------------------- Utils --------------------------------- */
 
-const Hi = styled.span`
-  background-color: #ffc803;
-  display: inline-block;
-`
-const Co = styled.span`
-  color: #ffc803;
-  margin: 0 0.2em;
-`
-const Bo = ({ c='primary', children, ...p }) => <Typography variant="soft" color={c} fontWeight={700} noWrap {...p}>{children}</Typography>
+// const Hi = styled.span`
+//   background-color: #ffc803;
+//   display: inline-block;
+// `
+// const Co = styled.span`
+//   color: #ffc803;
+//   margin: 0 0.2em;
+// `
+// const Bo = ({ c='primary', children, ...p }) => <Typography variant="soft" color={c} fontWeight={700} noWrap {...p}>{children}</Typography>
 
 
 const Big = ({ children, v='soft', c='primary', tooltip }) => {
-  return children && <Tooltip title={tooltip} color={c} variant="soft" arrow>
+  return children && <Tooltip title={tooltip && <b>{tooltip}</b>} open placement='top' color={c} variant="soft" arrow>
     <Chip color={c} variant={v} sx={{ fontSize: '1.8em', mx: 1, px: 2 }}>
       {/* <Co>[</Co> */}
       <b>{children}</b>
@@ -48,7 +42,7 @@ const Big = ({ children, v='soft', c='primary', tooltip }) => {
   </Tooltip>
 }
 
-const imageProcess = (img, { baseUrl }) => ({...img, src: img.src || `${baseUrl||''}/${img.file_name.replace(/^\//, '')}`})
+// const imageProcess = (img, { baseUrl }) => ({...img, src: img.src || `${baseUrl||''}/${img.file_name.replace(/^\//, '')}`})
 
 
 /* -------------------------------------------------------------------------- */
@@ -246,8 +240,10 @@ const InstructionsTask1 = ({ baseUrl }) => {
       <DarkModeButton />
 
       <Sheet sx={{ 
-        maxWidth: 850,  textAlign: 'center',
+        // maxWidth: '20em', 
+        textAlign: 'center',
         '& ul': {
+          maxWidth: '40em',
           textAlign: 'left',
           pl: 4,
           pr: 1,
@@ -259,11 +255,11 @@ const InstructionsTask1 = ({ baseUrl }) => {
           mt: 2,
         }
       }}>
-        <Box textAlign='center' sx={{ px: { xs: 0, lg: 6 }, '& > .MuiTypography-root': { px: 1 } }}>
+        <Stack textAlign='center' alignItems='center' sx={{ px: { xs: 0, lg: 6 }, '& > .MuiTypography-root': { px: 1 } }}>
         <T level='h1' sx={{ my: 4 }}>
           Verify the highlighted object
         </T>
-        <Stack direction='row'>
+        <Stack direction='row' justifyContent='center'>
           {HEADER_IMS?.map(({src, file_name, ...p}) => <SegmentedImage src={src||`${baseUrl}/${file_name}`} {...p} />)}
         </Stack>
         <T level='h4' sx={{ fontWeight: 400 }} mb={4} textAlign='center'>
@@ -276,15 +272,18 @@ const InstructionsTask1 = ({ baseUrl }) => {
         <T level='h4' sx={{ fontWeight: 400 }} mb={2} textAlign='center'>
         Your task is to verify that the highlighted area refers to the object mentioned in the question.
         </T>
+        <T level='h4' sx={{ fontWeight: 400 }} mb={2}>
         <ul>
-          <li>If the highlighted area includes multiple instances of the object, the annotation is valid.</li>
-          <li>If the highlighted area includes a significant or meaningful part of the object, the annotation is also valid.</li>
+          <li>If the highlighted area includes multiple instances of the object, the annotation is valid. ✅</li>
+          <li>If the highlighted area includes a significant or meaningful part of the object, the annotation is also valid. ✅</li>
           <li>
             If the highlighted area includes other objects, but the target object is still the dominant part of the annotation, 
-            the annotation can be considered valid.
+            the annotation can be considered valid. ✅
           </li>
         </ul>
-        </Box>
+        </T>
+        
+        </Stack>
 
         {/* <T sx={{
           '& ul': {
@@ -327,7 +326,7 @@ const InstructionsTask1 = ({ baseUrl }) => {
           <B>
             <T level='h3'>{title}</T>
             <T>{description}</T>
-            <Stack direction='row'>
+            <Stack direction='row' justifyContent='center'>
               {images?.map(({src, file_name, ...p}) => <SegmentedImage src={src||`${baseUrl}/${file_name}`} {...p} />)}
             </Stack>
           </B>
@@ -387,6 +386,26 @@ const InstructionsTask2 = ({ baseUrl }) => {
         },
       ],
     },
+
+    {
+      images: [
+        {
+          file_name: "P24_08_349_88885.jpg",
+          label: 'cup held', correct: true,
+          // description: 'the cup is being held',
+        },
+        {
+          file_name: "P28_104_40_6067.jpg",
+          label: 'cutting board clean', correct: true,
+        },
+        {
+          file_name: "P35_108_245_45052.jpg",
+          label: 'knife not clean', correct: false,
+          // description: 'the knife is still in the process of being cleaned',
+        },
+      ],
+    },
+
     {
       // title: 'Simple Cases',
       // description: 'The object is clearly visible and easy to classify.',
@@ -405,8 +424,6 @@ const InstructionsTask2 = ({ baseUrl }) => {
         },
       ],
     },
-
-    
     
   ]
 
@@ -418,7 +435,7 @@ const InstructionsTask2 = ({ baseUrl }) => {
       <DarkModeButton />
 
       <Sheet sx={{ 
-        maxWidth: 850,  textAlign: 'center',
+        textAlign: 'center',
         '& ul': {
           textAlign: 'left',
           pl: 4,
@@ -461,7 +478,7 @@ const InstructionsTask2 = ({ baseUrl }) => {
           <B>
             {title && <T level='h3'>{title}</T>}
             {description && <T>{description}</T>}
-            <Stack direction='row'>
+            <Stack direction='row' justifyContent='center'>
               {images?.map(({src, file_name, ...p}) => <SegmentedImage src={src||`${baseUrl}/${file_name}`} {...p} />)}
             </Stack>
           </B>
@@ -480,7 +497,7 @@ const EXPLANATIONS = {
   adj: {
     "above": "over",
     "active": "turned on, running",
-    "can-fit": "can be put inside of something",
+    "can-fit": "can be put inside of something, or something can fit inside of it",
     "clean": "not dirty, not covered in food/waste",
     "cut": "chopped, sliced",
     "deformed": "bent, squished",
@@ -513,6 +530,13 @@ const EXPLANATIONS = {
   }
 }
 
+// const TRANSLATIONS = {
+//   adj: {
+//     "is-peelable": "peeled",
+//     "is-openable": "closed",
+//   }
+// }
+
 
 export function Task1(props) {
   const { noun, group, baseUrl, aliases } = props;
@@ -525,10 +549,8 @@ export function Task1(props) {
     <LabelBox button={<InstructionsTask1 baseUrl={baseUrl} />}>
 
       <Typography textAlign='center' level='h3' sx={{ fontWeight: 400 }}>
-        Can this object be described as
-        <Typography sx={{ fontSize: '1.8em' }}>
-          <Co>[</Co><b>{noun || '—'}</b>({pluralSuffix(noun)})<Co>]</Co>
-        </Typography>?
+        Can this object be described as 
+        <Big v='soft'><b>{noun || '—'}</b>({pluralSuffix(noun)})</Big>?
       </Typography>
 
       {aliases?.length && <Stack direction='row' gap={2} justifyContent='center'>
@@ -600,9 +622,9 @@ function naturalizePredicate(predicate, subjectNoun, objectNoun) {
   shortLinkVerb = linkVerb=='is'?'' : linkVerb;
   adj = adj?.replace('-', ' ');
 
-  if (`${linkVerb} ${adj}` == 'can fit') {
-    adj = 'fit in';
-  }
+  // if (`${linkVerb} ${adj}` == 'can fit') {
+  //   adj = 'fit in';
+  // }
   if (adj == 'onsurface') {
     adj = 'on';
     object = 'surface';
@@ -616,6 +638,7 @@ function naturalizePredicate(predicate, subjectNoun, objectNoun) {
   subjectArticle = "the"
   objectArticle = object && objectNoun?"a":"";
   subjectNoun = subjectNoun || "object";
+  let ogObjectNoun = objectNoun || "";
   objectNoun = object ? (objectNoun||"something") : "";
   // fixes
   
@@ -631,8 +654,8 @@ function naturalizePredicate(predicate, subjectNoun, objectNoun) {
     negativeQuestion: cln(`${linkVerb} ${subjectArticle} ${subjectNoun} not ${adj} ${objectArticle} ${objectNoun}? ${post}`),
     positiveStatement: cln(`${subjectNoun} ${linkVerb} ${adj} ${objectNoun}`),
     negativeStatement: cln(`${subjectNoun} ${linkVerb} not ${adj} ${objectNoun}`),
-    positiveShort: cln(`${subjectNoun} ${shortLinkVerb} ${adj}`),
-    negativeShort: cln(`${subjectNoun} ${shortLinkVerb} not ${adj}`),
+    positiveShort: cln(`${subjectNoun} ${shortLinkVerb} ${adj} ${ogObjectNoun}`),
+    negativeShort: cln(`${subjectNoun} ${shortLinkVerb} not ${adj} ${ogObjectNoun}`),
     positiveVerb: cln(`${shortLinkVerb} ${adj}`),
     negativeVerb: cln(`${shortLinkVerb} not ${adj}`),
     bigQuestion: <>
@@ -643,6 +666,7 @@ function naturalizePredicate(predicate, subjectNoun, objectNoun) {
 
 
 export default function Task({ task='noun', ...props }) {
+  console.log(task, props)
   switch (task) {
     case 'noun':
       return <Task1 {...props} />

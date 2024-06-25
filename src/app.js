@@ -18,22 +18,14 @@ export default function App({ pageSize=6, seed=12345, ...props }) {
     page = isNaN(page) ? undefined : page;
   
     // const { nouns, pageData, total } = useFullCsv(`/mturk_batches_${props.task}.json`, { noun, page, pageSize, seed });
-    const { options, pageData, total } = useBatchCsv(`/mturk_batches_${task}.csv`, { group, page, pageSize, seed, batchKey: TASK_KEY[task] });
-
-    // const { data: nounData } = useCsv(`/EPIC_100_noun_classes_v2.csv`);
-    // console.log(nounData)
-    // let aliases = React.useMemo(() => 
-    //   nounData?.reduce((o, x) => (x.key?{...o, [fixNounFormat(x.key)]: JSON.parse(x.instances.replaceAll("'", '"')).filter(k=>k!=x.key).map(fixNounFormat)}:o), {})
-    // , [nounData])
-    let aliases;
-
-    console.log({ options, pageData, group, page, total });
-
-
+    const { options, pageData, total } = useBatchCsv(props.images ? null : `/mturk_batches_${task}.csv`, { group, page, pageSize, seed, batchKey: TASK_KEY[task] });
+    console.log({ options, pageData, group, page, total, props });
 
     return (<>
       <form>
-        {pageData && <Task {...props} task={task} page={page} total={total} {...pageData} aliases={aliases?.[group]} />}
+        {pageData ? 
+          <Task task={task} page={page} total={total} {...pageData} {...props} />
+          : <Task {...props} />}
       </form>
       <ul>
         {options.map(n => <li key={n}><a href={`?group=${n}`}>{n}</a></li>)}
